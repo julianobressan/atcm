@@ -67,7 +67,6 @@ abstract class ModelBase implements IModelBase
             unset($this->properties[$this->idField]);
         }
     }
-
         
     /**
      * Return an array with all public field of object
@@ -146,19 +145,19 @@ abstract class ModelBase implements IModelBase
     }
 
      /**
-     * Deletes a row in database identified by your ID (primary key)
+     * Deletes a row in database identified by DELETEyour ID (primary key)
      *
      * @param int $id
      * @return void
      */
     public function delete(): void
     {
-        if (isset($this->properties[$this->idField])) {
- 
-            $sql = "DELETE FROM {$this->table} WHERE {$this->idField} = {$this->properties[$this->idField]};";
-     
+        if (isset($this->properties[$this->idField])) { 
+            //$sql = "DELETE FROM {$this->table} WHERE {$this->idField} = {$this->properties[$this->idField]};";
+            $sql = "UPDATE {$this->table} SET deleted_at = NOW() WHERE {$this->idField} = {$this->properties[$this->idField]};";
             if ($database = Database::getInstance()) {
                 $database->exec($sql);
+                $this->properties = [];
             } else {
                 throw new DataAccessException("There is no connection to database.");
             }
@@ -221,13 +220,13 @@ abstract class ModelBase implements IModelBase
     /**
      * Return all registers in the table
      *
-     * @param  mixed $filter
-     * @param  mixed $limit
-     * @param  mixed $offset
+     * @param  mixed $filter Where clausules can be passed
+     * @param  mixed $limit Number of registers to return can be informed
+     * @param  mixed $offset Offset of registers can be passed, useful for pagination
      * @param  mixed $includeDeleted
      * @return array
      */
-    public static function all(string $filter = '', int $limit = 0, int $offset = 0, bool $includeDeleted = false): array
+    public static function all(string $filter = '', array $orderBy=[], int $limit = 0, int $offset = 0, bool $includeDeleted = false): array
     {
         if(!$includeDeleted) {
             $filter .= empty(trim($filter)) ? "deleted_at IS NULL" : "({$filter}) AND deleted_at IS NULL" ;
@@ -238,6 +237,7 @@ abstract class ModelBase implements IModelBase
         $sql .= ($filter !== '') ? " WHERE {$filter}" : "";
         $sql .= ($limit > 0) ? " LIMIT {$limit}" : "";
         $sql .= ($offset > 0) ? " OFFSET {$offset}" : "";
+        $sql .= empty($orderBy) ? "" : " ORDER BY " . implode(", ",$orderBy);
         $sql .= ';';
     
         if ($connection = Database::getInstance()) {
