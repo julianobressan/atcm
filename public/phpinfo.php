@@ -1,4 +1,3 @@
 <?php 
-foreach(PDO::getAvailableDrivers() as $driver) {
-    echo $driver;
-  }
+exec("which php", $a);
+var_dump($a);
