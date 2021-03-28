@@ -6,6 +6,7 @@ use ATCM\Core\Exceptions\DataAccessException;
 use ATCM\Data\Interfaces\IModelBase;
 use ATCM\Core\Helpers\StringHelper;
 use Exception;
+use LogicException;
 use Test\Data\Models\ExampleModel;
 
 /**
@@ -112,7 +113,7 @@ abstract class ModelBase implements IModelBase
      * @param int $id The 
      * @return IModelBase|null An object that represent the related row in the database
      */
-    public static function find(int $id, $includeDeleted = false)
+    public static function find(int $id, $includeDeleted = false): ?IModelBase
     {
         $class = get_called_class();
         $idField = (new $class())->idField;
@@ -278,7 +279,7 @@ abstract class ModelBase implements IModelBase
      * @param  mixed $includeDeleted
      * @return array
      */
-    public static function first(string $filter = '', array $orderBy=[])
+    public static function first(string $filter = '', array $orderBy=[]): ?IModelBase
     {
         $return = self::all($filter, $orderBy, 1, 0);
         return $return[0] ?? null;
@@ -327,7 +328,7 @@ abstract class ModelBase implements IModelBase
      * @param  mixed $filter
      * @return int Number of registers
      */
-    public static function count(string $fieldName = '*', string $filter = '', bool $includeDeleted = false)
+    public static function count(string $fieldName = '*', string $filter = '', bool $includeDeleted = false): int
     {
         $class = get_called_class();
         $table = (new $class())->table;
@@ -344,5 +345,35 @@ abstract class ModelBase implements IModelBase
         return (int) $result['total'];
 
     }
-
+    
+    /**
+     * Returns all objects related to this (foreign key) in the informed model
+     *
+     * @param  mixed $class
+     * @return array
+     */
+    protected function hasMany($class): array
+    {
+        throw new Exception("Method not implemented yet");
+        if(!is_subclass_of($class, ModelBase::class)) throw new LogicException($class . " not extends " . ModelBase::class);
+        return [];
+    }
+    
+    /**
+     * Return the 0-1 row relation to Model passed by parameter
+     *
+     * @param  mixed $class
+     * @return IModelBase One object of informed class type informed, if exists. Null will returns if not exists.
+     */
+    protected function belongsTo($class): ?IModelBase
+    {
+        if (!is_subclass_of($class, ModelBase::class)) throw new LogicException($class . " not extends " . ModelBase::class);
+        $belongsToClass = StringHelper::toCamelCase((new \ReflectionClass($class))->getShortName());
+        $foreignKeyName = $belongsToClass . "Id";
+        if (!is_null($this->$foreignKeyName)) {
+            $object = $class::find($this->$foreignKeyName);
+            return $object;
+        }
+        return null;
+    }
 }
