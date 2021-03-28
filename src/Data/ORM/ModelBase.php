@@ -5,6 +5,8 @@ namespace ATCM\Data\ORM;
 use ATCM\Core\Exceptions\DataAccessException;
 use ATCM\Data\Interfaces\IModelBase;
 use ATCM\Core\Helpers\StringHelper;
+use Exception;
+use Test\Data\Models\ExampleModel;
 
 /**
  * Base object to models, with methods to handle the database
@@ -15,13 +17,16 @@ use ATCM\Core\Helpers\StringHelper;
  */
 abstract class ModelBase implements IModelBase
 {
+    private static ?\PDO $database = null;
     private array $properties = [];
     protected string $table = "";
     protected string $idField = "";
     protected bool $timestamps;
 
     public function __construct()
-    { 
+    {             
+        self::getConnection();
+
         $this->timestamps = true;        
  
         if (empty($this->table)) {
@@ -30,6 +35,19 @@ abstract class ModelBase implements IModelBase
         if (empty($this->idField)) {
             $this->idField = 'id';
         }
+    }
+
+    private static function getConnection(): \PDO
+    {        
+        try {
+            if(is_null(self::$database)) {
+                self::$database = Database::getInstance();
+            }
+            return self::$database;
+        } catch (DataAccessException $e) {
+            throw new Exception("It was not possible to create an instance of " . get_called_class() . 
+                " because connection problems.", 0, $e);
+        }   
     }
 
     public function __set($parameter, $value)
@@ -104,18 +122,14 @@ abstract class ModelBase implements IModelBase
         $sql .= ' WHERE ' . (is_null($idField) ? 'id' : $idField);
         $sql .= " = {$id} " . ($includeDeleted ?: "AND deleted_at IS NULL") . ";";
     
-        if ($database = Database::getInstance()) {
-            $result = $database->query($sql);
-    
-            if ($result) {
-                $fields = $result->fetch(\PDO::FETCH_ASSOC);
-                if(!$fields) return null;
+        $result = self::getConnection()->query($sql);
 
-                return self::parseObject($fields);
-            }            
-        } else {
-            throw new DataAccessException("There is no connection to database.");
-        }
+        if ($result) {
+            $fields = $result->fetch(\PDO::FETCH_ASSOC);
+            if(!$fields) return null;
+
+            return self::parseObject($fields);
+        }            
     }
 
     private static function parseObject(array $row): IModelBase
@@ -155,12 +169,10 @@ abstract class ModelBase implements IModelBase
         if (isset($this->properties[$this->idField])) { 
             //$sql = "DELETE FROM {$this->table} WHERE {$this->idField} = {$this->properties[$this->idField]};";
             $sql = "UPDATE {$this->table} SET deleted_at = NOW() WHERE {$this->idField} = {$this->properties[$this->idField]};";
-            if ($database = Database::getInstance()) {
-                $database->exec($sql);
-                $this->properties = [];
-            } else {
-                throw new DataAccessException("There is no connection to database.");
-            }
+
+            self::getConnection()->exec($sql);
+            $this->properties = [];
+
         }
     }
         
@@ -181,6 +193,7 @@ abstract class ModelBase implements IModelBase
                 $normalizedKey = StringHelper::toSnakeCase($key);
                 $sets[] = "{$normalizedKey} = {$value}";
             }
+            if($this->timestamps) $sets[] = "updated_at = NOW()";
             $sql = "UPDATE {$this->table} SET " . implode(', ', $sets) . " WHERE {$this->idField} = {$this->properties[$this->idField]};";
         } else {
             $normalizedKeys = [];
@@ -192,16 +205,12 @@ abstract class ModelBase implements IModelBase
             $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$sets});";
         }
 
-        if ($database = Database::getInstance()) {
-            $database->exec($sql);
-            if(!isset($this->properties[$this->idField])) {
-                $insertedId = intval($database->lastInsertId());
-                $this->properties[$this->idField] = $insertedId;
-            }
-            return $this;
-        } else {
-            throw new DataAccessException("There is no connection to database.");
+        self::getConnection()->exec($sql);
+        if(!isset($this->properties[$this->idField])) {
+            $insertedId = intval(self::getConnection()->lastInsertId());
+            $this->properties[$this->idField] = $insertedId;
         }
+        return $this;        
     }
         
     /**
@@ -211,10 +220,16 @@ abstract class ModelBase implements IModelBase
      * @param array $params
      * @return IModelBase
      */
-    public static function create(array $params): IModelBase
+    public static function create(array $params = []): IModelBase
     {
-        throw new \Exception("Method not implemented yet");
+        $class = get_called_class();
+        $newObject = new $class();
 
+        foreach ($params as $key => $value) {
+            $newObject->$key = $value;
+        }
+
+        return $newObject;
     }
     
     /**
@@ -238,21 +253,31 @@ abstract class ModelBase implements IModelBase
         $sql .= ($limit > 0) ? " LIMIT {$limit}" : "";
         $sql .= ($offset > 0) ? " OFFSET {$offset}" : "";
         $sql .= empty($orderBy) ? "" : " ORDER BY " . implode(", ",$orderBy);
-        $sql .= ';';
-    
-        if ($connection = Database::getInstance()) {
-            $result = $connection->query($sql);
-            $rows = $result->fetchAll(\PDO::FETCH_ASSOC);
-            $objects = [];
-            foreach ($rows as $row) {
-                $objects[] = self::parseObject($row);
-            }
-            return $objects;
-        } else {
-            throw new DataAccessException("There is no connection to database.");
+        $sql .= ';';    
+        
+        $result = self::getConnection()->query($sql);
+        $rows = $result->fetchAll(\PDO::FETCH_ASSOC);
+        $objects = [];
+        foreach ($rows as $row) {
+            $objects[] = self::parseObject($row);
         }
+        return $objects;
     }
 
+    /**
+     * Return all registers in the table
+     *
+     * @param  mixed $filter Where clausules can be passed
+     * @param  mixed $limit Number of registers to return can be informed
+     * @param  mixed $offset Offset of registers can be passed, useful for pagination
+     * @param  mixed $includeDeleted
+     * @return array
+     */
+    public static function first(string $filter = '', array $orderBy=[])
+    {
+        $return = self::all($filter, $orderBy, 1, 0);
+        return $return[0] ?? null;
+    }
         
     /**
      * Format values according the sintax accepted by databases, preventing that user can pass

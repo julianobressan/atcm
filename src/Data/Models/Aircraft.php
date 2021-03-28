@@ -6,5 +6,5 @@ use ATCM\Data\ORM\ModelBase;
 
 class Aircraft extends ModelBase
 {
-    
+    protected bool $timestamps = true;
 }
