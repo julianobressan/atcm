@@ -20,7 +20,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "ATCM\\": "src/"
+            "ATCM\\": "src/",
+            "Test\\": "tests/"
         }
     },
     "scripts": {
