@@ -48,4 +48,37 @@ class QueueTest extends TestCase
         assertEquals(0, Queue::count());
 
     }
+
+    public function testAircraft()
+    {
+        
+        $aircraft = Aircraft::create([
+            'model' => 'Boeing 777',
+            'flightNumber' => 'BRA9878',
+            'size' => AircraftSize::LARGE,
+            'type' => AircraftType::VIP
+        ]);
+        $aircraft->save();
+        
+        $queue = new Queue();
+        $queue->aircraftId = $aircraft->id;
+        $queue->save();
+        
+        $aircraft2 = $queue->aircraft();
+        assertNotNull($aircraft2);
+        assertEquals('BRA9878', $aircraft2->flightNumber);
+    }
+
+    public function tearDown(): void
+    {
+        $aircrafts = Aircraft::all();
+        foreach($aircrafts as $aircraft) {
+            $aircraft->delete();
+        }
+
+        $queues = Queue::all();
+        foreach($queues as $queue) {
+            $queue->delete();
+        }
+    }
 }

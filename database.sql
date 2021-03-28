@@ -20,5 +20,18 @@ CREATE TABLE `atcm`.`user` (
   `created_at` DATETIME NOT NULL DEFAULT now(),
   `updated_at` DATETIME NULL,
   `deleted_at` DATETIME NULL,
+  PRIMARY KEY (`id`);
+
+CREATE TABLE `atcm`.`queue` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `aircraft_id` INT UNSIGNED NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT NOW(),
+  `updated_at` DATETIME NULL,
+  `deleted_at` DATETIME NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `flight_number_UNIQUE` (`flight_number` ASC) VISIBLE);
+  INDEX `fk_queue_aircraft_idx` (`aircraft_id` ASC) VISIBLE,
+  CONSTRAINT `fk_queue_aircraft`
+    FOREIGN KEY (`aircraft_id`)
+    REFERENCES `atcm`.`aircraft` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
