@@ -2,6 +2,7 @@
 
 namespace ATCM\Data\ORM;
 
+use ATCM\Core\Exceptions\DataAccessException;
 use ATCM\Data\Interfaces\IModelBase;
 use ATCM\Core\Helpers\StringHelper;
 
@@ -24,7 +25,7 @@ abstract class ModelBase implements IModelBase
         $this->timestamps = true;        
  
         if (empty($this->table)) {
-            $this->table = StringHelper::toSnakeCase(get_class($this));
+            $this->table = StringHelper::toSnakeCase((new \ReflectionClass($this))->getShortName());
         }
         if (empty($this->idField)) {
             $this->idField = 'id';
@@ -92,11 +93,42 @@ abstract class ModelBase implements IModelBase
      * Retrieves a row in database identified by your ID (primary key)
      *
      * @param int $id The 
-     * @return IModelBase An object that represent the related row in the database
+     * @return IModelBase|null An object that represent the related row in the database
      */
-    public function find(int $id): IModelBase
+    public static function find(int $id, $includeDeleted = false)
     {
-        throw new \Exception("Method not implemented yet");
+        $class = get_called_class();
+        $idField = (new $class())->idField;
+        $table = (new $class())->table;
+    
+        $sql = 'SELECT * FROM ' . (is_null($table) ? strtolower($class) : $table);
+        $sql .= ' WHERE ' . (is_null($idField) ? 'id' : $idField);
+        $sql .= " = {$id} " . ($includeDeleted ?: "AND deleted_at IS NULL") . ";";
+    
+        if ($database = Database::getInstance()) {
+            $result = $database->query($sql);
+    
+            if ($result) {
+                $fields = $result->fetch(\PDO::FETCH_ASSOC);
+                if(!$fields) return null;
+
+                return self::parseObject($fields);
+            }            
+        } else {
+            throw new DataAccessException("There is no connection to database.");
+        }
+    }
+
+    private static function parseObject(array $row): IModelBase
+    {
+        $class = get_called_class();
+        $newObject = new $class();
+        foreach($row as $key => $value) {                    
+            $keyConverted = StringHelper::toCamelCase($key, "_");
+            
+            $newObject->$keyConverted = $value;
+        }
+        return $newObject;
     }
         
     /**
@@ -105,9 +137,32 @@ abstract class ModelBase implements IModelBase
      * @param int $id
      * @return void
      */
-    public function delete(int $id): void
+    public static function destroy(int $id): void
     {
+        $class = get_called_class();
+        $object = new $class();
+        $object->id = $id;
+        $object->delete();
+    }
 
+     /**
+     * Deletes a row in database identified by your ID (primary key)
+     *
+     * @param int $id
+     * @return void
+     */
+    public function delete(): void
+    {
+        if (isset($this->properties[$this->idField])) {
+ 
+            $sql = "DELETE FROM {$this->table} WHERE {$this->idField} = {$this->properties[$this->idField]};";
+     
+            if ($database = Database::getInstance()) {
+                $database->exec($sql);
+            } else {
+                throw new DataAccessException("There is no connection to database.");
+            }
+        }
     }
         
     /**
@@ -117,8 +172,37 @@ abstract class ModelBase implements IModelBase
      */
     public function save(): IModelBase
     {
-        throw new \Exception("Method not implemented yet");
+        $newContent = $this->convertProperties();
+ 
+        if (isset($this->properties[$this->idField])) {
+            $sets = array();
+            foreach ($newContent as $key => $value) {
+                if ($key === $this->idField)
+                    continue;
+                $normalizedKey = StringHelper::toSnakeCase($key);
+                $sets[] = "{$normalizedKey} = {$value}";
+            }
+            $sql = "UPDATE {$this->table} SET " . implode(', ', $sets) . " WHERE {$this->idField} = {$this->properties[$this->idField]};";
+        } else {
+            $normalizedKeys = [];
+            foreach(array_keys($newContent) as $key) {
+                $normalizedKeys[] = StringHelper::toSnakeCase($key);
+            }
+            $columns = implode(', ', $normalizedKeys);
+            $sets = implode(', ', array_values($newContent));
+            $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$sets});";
+        }
 
+        if ($database = Database::getInstance()) {
+            $database->exec($sql);
+            if(!isset($this->properties[$this->idField])) {
+                $insertedId = intval($database->lastInsertId());
+                $this->properties[$this->idField] = $insertedId;
+            }
+            return $this;
+        } else {
+            throw new DataAccessException("There is no connection to database.");
+        }
     }
         
     /**
@@ -128,10 +212,45 @@ abstract class ModelBase implements IModelBase
      * @param array $params
      * @return IModelBase
      */
-    public function create(array $params): IModelBase
+    public static function create(array $params): IModelBase
     {
         throw new \Exception("Method not implemented yet");
 
+    }
+    
+    /**
+     * Return all registers in the table
+     *
+     * @param  mixed $filter
+     * @param  mixed $limit
+     * @param  mixed $offset
+     * @param  mixed $includeDeleted
+     * @return array
+     */
+    public static function all(string $filter = '', int $limit = 0, int $offset = 0, bool $includeDeleted = false): array
+    {
+        if(!$includeDeleted) {
+            $filter .= empty(trim($filter)) ? "deleted_at IS NULL" : "({$filter}) AND deleted_at IS NULL" ;
+        }
+        $class = get_called_class();
+        $table = (new $class())->table;
+        $sql = 'SELECT * FROM ' . (is_null($table) ? strtolower($class) : $table);
+        $sql .= ($filter !== '') ? " WHERE {$filter}" : "";
+        $sql .= ($limit > 0) ? " LIMIT {$limit}" : "";
+        $sql .= ($offset > 0) ? " OFFSET {$offset}" : "";
+        $sql .= ';';
+    
+        if ($connection = Database::getInstance()) {
+            $result = $connection->query($sql);
+            $rows = $result->fetchAll(\PDO::FETCH_ASSOC);
+            $objects = [];
+            foreach ($rows as $row) {
+                $objects[] = self::parseObject($row);
+            }
+            return $objects;
+        } else {
+            throw new DataAccessException("There is no connection to database.");
+        }
     }
 
         
@@ -162,13 +281,13 @@ abstract class ModelBase implements IModelBase
      */
     private function convertProperties()
     {
-        $newProperties = array();
+        $convertedProperties = array();
         foreach ($this->properties as $key => $value) {
             if (is_scalar($value)) {
-                $newProperties[$key] = $this->normalizeValues($value);
+                $convertedProperties[$key] = $this->normalizeValues($value);
             }
         }
-        return $newProperties;
+        return $convertedProperties;
     }
 
 }
