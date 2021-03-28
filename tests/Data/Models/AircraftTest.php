@@ -93,6 +93,12 @@ class AircraftTest extends TestCase
         assertEquals("Airbus A330", $aircraft2->model);
     }
 
+    public function testCountAircraft()
+    { 
+        $count = Aircraft::count();
+        assertEquals(2, $count);
+    }
+
     public function testDeleteAircraft()
     {        
         $aircrafts = Aircraft::all();

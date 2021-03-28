@@ -45,7 +45,7 @@ abstract class ModelBase implements IModelBase
             }
             return self::$database;
         } catch (DataAccessException $e) {
-            throw new Exception("It was not possible to create an instance of " . get_called_class() . 
+            throw new DataAccessException("It was not possible to create an instance of " . get_called_class() . 
                 " because connection problems.", 0, $e);
         }   
     }
@@ -313,6 +313,31 @@ abstract class ModelBase implements IModelBase
             }
         }
         return $convertedProperties;
+    }
+    
+    /**
+     * Return the number of results in the table, acording the filter passed (default = empty)
+     *
+     * @param  mixed $fieldName
+     * @param  mixed $filter
+     * @return int Number of registers
+     */
+    public static function count(string $fieldName = '*', string $filter = '', bool $includeDeleted = false)
+    {
+        $class = get_called_class();
+        $table = (new $class())->table;
+        $sql = "SELECT count($fieldName) as total FROM " . (is_null($table) ? strtolower($class) : $table);
+        $sql .= ($filter !== '') 
+            ? " WHERE {$filter} " . ($includeDeleted ? "" : " AND deleted_at IS NULL") 
+            : ($includeDeleted ? "" : " WHERE deleted_at IS NULL");
+        $sql .= ($includeDeleted ? "" : " AND deleted_at IS NULL");
+        $sql .= ';';
+
+        $query = self::$database->prepare($sql);
+        $query->execute();
+        $result = $query->fetch(\PDO::FETCH_ASSOC);
+        return (int) $result['total'];
+
     }
 
 }
