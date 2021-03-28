@@ -17,7 +17,7 @@ interface IModelBase
      * @param int $id The 
      * @return IModelBase An object that represent the related row in the database
      */
-    function find(int $id): IModelBase;
+    static function find(int $id);
         
     /**
      * Deletes a row in database identified by your ID (primary key)
@@ -25,14 +25,22 @@ interface IModelBase
      * @param int $id
      * @return void
      */
-    function delete(int $id): void;
+    static function destroy(int $id);
+
+    /**
+     * Deletes a row in database identified by your ID (primary key)
+     *
+     * @param int $id
+     * @return void
+     */
+    function delete();
         
     /**
      * Updates or creates a row in the database
      *
      * @return IModelBase An object that represent the related row in the database
      */
-    function save(): IModelBase;
+    function save();
         
     /**
      * Creates an object with parameters passed by array
@@ -40,5 +48,5 @@ interface IModelBase
      * @param array $params A named array with fields for the object creation
      * @return IModelBase
      */
-    function create(array $params): IModelBase;
+    static function create(array $params);
 }
