@@ -115,7 +115,4 @@ class AircraftTest extends TestCase
         $aircrafts3 = Aircraft::all();
         assertEmpty($aircrafts3);
     }
-
-   
-
 }

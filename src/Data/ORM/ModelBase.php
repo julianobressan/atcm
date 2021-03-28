@@ -150,12 +150,17 @@ abstract class ModelBase implements IModelBase
      * @param int $id
      * @return void
      */
-    public static function destroy(int $id): void
+    public static function destroy($objectOrId): void
     {
-        $class = get_called_class();
-        $object = new $class();
-        $object->id = $id;
-        $object->delete();
+        if(is_scalar($objectOrId)) {
+            $class = get_called_class();
+            $object = new $class();
+            $object->id = $objectOrId;
+            $object->delete();
+        } else {
+            $objectOrId->delete();
+        }
+        
     }
 
      /**
