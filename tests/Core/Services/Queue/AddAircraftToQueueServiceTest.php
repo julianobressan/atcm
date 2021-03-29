@@ -29,7 +29,7 @@ class AddAircraftToQueueServiceTest extends TestCase
         AddAircraftToQueueService::execute($aircraft->id);
         assertEquals(1, count($aircraft->enqueued()));
 
-        $this->expectException(LogicException::class);
+        $this->expectException(NotAllowedException::class);
         AddAircraftToQueueService::execute($aircraft->id);
     }
 
@@ -39,7 +39,7 @@ class AddAircraftToQueueServiceTest extends TestCase
 
         HaltSystemService::execute();
 
-        $this->expectException(LogicException::class);
+        $this->expectException(NotAllowedException::class);
 
         AddAircraftToQueueService::execute($aircraft->id);       
     }
