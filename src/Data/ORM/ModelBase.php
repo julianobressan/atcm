@@ -41,7 +41,7 @@ abstract class ModelBase implements IModelBase
     private static function getConnection(): \PDO
     {        
         try {
-            if(is_null(self::$database)) {
+            if (is_null(self::$database)) {
                 self::$database = Database::getInstance();
             }
             return self::$database;
@@ -137,7 +137,7 @@ abstract class ModelBase implements IModelBase
     {
         $class = get_called_class();
         $newObject = new $class();
-        foreach($row as $key => $value) {                    
+        foreach ($row as $key => $value) {                    
             $keyConverted = StringHelper::toCamelCase($key, "_");
             
             $newObject->$keyConverted = $value;
@@ -153,7 +153,7 @@ abstract class ModelBase implements IModelBase
      */
     public static function destroy($objectOrId): void
     {
-        if(is_scalar($objectOrId)) {
+        if (is_scalar($objectOrId)) {
             $class = get_called_class();
             $object = new $class();
             $object->id = $objectOrId;
@@ -199,7 +199,7 @@ abstract class ModelBase implements IModelBase
                 $normalizedKey = StringHelper::toSnakeCase($key);
                 $sets[] = "{$normalizedKey} = {$value}";
             }
-            if($this->timestamps) $sets[] = "updated_at = NOW()";
+            if ($this->timestamps) $sets[] = "updated_at = NOW()";
             $sql = "UPDATE {$this->table} SET " . implode(', ', $sets) . " WHERE {$this->idField} = {$this->properties[$this->idField]};";
         } else {
             $normalizedKeys = [];
@@ -212,7 +212,7 @@ abstract class ModelBase implements IModelBase
         }
 
         self::getConnection()->exec($sql);
-        if(!isset($this->properties[$this->idField])) {
+        if (!isset($this->properties[$this->idField])) {
             $insertedId = intval(self::getConnection()->lastInsertId());
             $this->properties[$this->idField] = $insertedId;
         }
@@ -247,10 +247,10 @@ abstract class ModelBase implements IModelBase
      * @param  mixed $includeDeleted
      * @return array
      */
-    public static function all(string $filter = '', array $orderBy=[], int $limit = 0, int $offset = 0, bool $includeDeleted = false): array
+    public static function all(string $filter = '', array $orderBy = [], int $limit = 0, int $offset = 0, bool $includeDeleted = false): array
     {
-        if(!$includeDeleted) {
-            $filter .= empty(trim($filter)) ? "deleted_at IS NULL" : "({$filter}) AND deleted_at IS NULL" ;
+        if (!$includeDeleted) {
+            $filter = empty(trim($filter)) ? "deleted_at IS NULL" : "({$filter}) AND deleted_at IS NULL" ;
         }
         $class = get_called_class();
         $table = (new $class())->table;
@@ -271,13 +271,13 @@ abstract class ModelBase implements IModelBase
     }
 
     /**
-     * Return all registers in the table
+     * Return the first occurrency in the table that attends the filter. 
      *
      * @param  mixed $filter Where clausules can be passed
      * @param  mixed $limit Number of registers to return can be informed
      * @param  mixed $offset Offset of registers can be passed, useful for pagination
      * @param  mixed $includeDeleted
-     * @return array
+     * @return IModelBase|null An object or null
      */
     public static function first(string $filter = '', array $orderBy=[]): ?IModelBase
     {
@@ -354,9 +354,10 @@ abstract class ModelBase implements IModelBase
      */
     protected function hasMany($class): array
     {
-        throw new Exception("Method not implemented yet");
-        if(!is_subclass_of($class, ModelBase::class)) throw new LogicException($class . " not extends " . ModelBase::class);
-        return [];
+        if (!is_subclass_of($class, ModelBase::class)) throw new LogicException($class . " not extends " . ModelBase::class);
+        $foreignKeyName = self::getForeignKey($this, true);
+        $relatedObjects = $class::all("{$foreignKeyName} = {$this->id}");
+        return $relatedObjects;
     }
     
     /**
@@ -368,12 +369,19 @@ abstract class ModelBase implements IModelBase
     protected function belongsTo($class): ?IModelBase
     {
         if (!is_subclass_of($class, ModelBase::class)) throw new LogicException($class . " not extends " . ModelBase::class);
-        $belongsToClass = StringHelper::toCamelCase((new \ReflectionClass($class))->getShortName());
-        $foreignKeyName = $belongsToClass . "Id";
+        $foreignKeyName = self::getForeignKey($class);
         if (!is_null($this->$foreignKeyName)) {
             $object = $class::find($this->$foreignKeyName);
             return $object;
         }
         return null;
+    }
+
+    protected static function getForeignKey($class, $databaseFormat = false)
+    {
+        $reflectedClass = new \ReflectionClass($class);
+        $shortName = $reflectedClass->getShortName() . "Id";
+        $foreignKeyName = $databaseFormat ? StringHelper::toSnakeCase($shortName) : StringHelper::toCamelCase($shortName);
+        return $foreignKeyName;
     }
 }

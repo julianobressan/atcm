@@ -4,7 +4,7 @@ An Air Traffic Control Manager
 ## Configuring the environment
 
 ### PHP
-
+PHP 7.4
 ### Web server
 
 ### Database

@@ -13,4 +13,12 @@ class Queue extends ModelBase
     {
         return $this->belongsTo(Aircraft::class);
     }
+
+    public static function isAircraftOnQueue($aircraftId): bool
+    {
+        $foreignKey = self::getForeignKey(Aircraft::class);
+        $aircraft = self::first("{$foreignKey} = {$aircraftId}");
+        $existsOnQueue = !is_null($aircraft);
+        return $existsOnQueue;
+    }
 }

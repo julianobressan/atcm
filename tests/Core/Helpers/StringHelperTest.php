@@ -29,6 +29,9 @@ class StringHelperTest extends TestCase
 
         $input3 = "one two three";
         assertEquals("oneTwoThree", StringHelper::toCamelCase($input3));
+
+        $input4 = "oneTwoThree";
+        assertEquals("oneTwoThree", StringHelper::toCamelCase($input4));
     }
 
     public function testToSnakeCase()

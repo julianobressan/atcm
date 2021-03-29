@@ -22,8 +22,13 @@ class StringHelper
      */
     public static function toCamelCase(string $text, string $separator = " "): string
     {
-        $pascalCaseText = self::toPascalCase($text, $separator);
-        return lcfirst($pascalCaseText);
+        $camelCaseText = "";
+        if(strpos($text, $separator) === false) {
+            $camelCaseText = $text;
+        } else {            
+            $camelCaseText = self::toPascalCase($text, $separator);
+        }
+        return lcfirst($camelCaseText);
     }
 
     /**
@@ -66,9 +71,11 @@ class StringHelper
                 $parsedText .= "_";
                 continue;
             }
-            $previousCharacter = substr($text, $i - 1, 1);
-            if((ctype_upper($character) && ctype_lower($previousCharacter)) && $i > 0) {
-                $parsedText .= "_";
+            if($i >= 1) {
+                $previousCharacter = substr($text, $i - 1, 1);
+                if((ctype_upper($character) && ctype_lower($previousCharacter)) && $i > 0) {
+                    $parsedText .= "_";
+                }
             }
             $parsedText .= strtolower($character);
         }

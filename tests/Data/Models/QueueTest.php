@@ -71,14 +71,16 @@ class QueueTest extends TestCase
 
     public function tearDown(): void
     {
+        $queues = Queue::all();
+        foreach($queues as $queue) {
+            $queue->delete();
+        }
+        
         $aircrafts = Aircraft::all();
         foreach($aircrafts as $aircraft) {
             $aircraft->delete();
         }
 
-        $queues = Queue::all();
-        foreach($queues as $queue) {
-            $queue->delete();
-        }
+       
     }
 }
