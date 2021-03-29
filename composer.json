@@ -1,6 +1,6 @@
 {
-    "name": "brxdigital/brx-orm",
-    "description": "A simple ORM, easy to install, easy to use.",
+    "name": "julianobressan/atcm",
+    "description": "An air taffic controll manager",
     "type": "library",
     "require": {
         "monolog/monolog": "^2.2",
