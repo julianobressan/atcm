@@ -25,6 +25,11 @@ class DequeueService
             throw new NotAllowedException("The system is not online. It is not possible to add an aircraft.");
         }
 
-        
+        $aircraftsQueue = ListQueueService::execute();
+        if(count($aircraftsQueue) === 0) {
+            throw new NotAllowedException("There is no aircraft on queue. It is not possible to dequeue.");
+        }
+
+        $aircraftsQueue[0]->enqueued()[0]->delete();
     }
 }

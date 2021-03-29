@@ -42,7 +42,7 @@ class ListQueueServiceTest extends TestCase
         $this->createAircraft(AircraftType::CARGO, AircraftSize::SMALL);
         $this->createAircraft(AircraftType::VIP, AircraftSize::SMALL);
         $this->createAircraft(AircraftType::PASSENGER, AircraftSize::LARGE);
-        $this->createAircraft(AircraftType::EMERGENCY, AircraftSize::SMALL);
+        $this->createAircraft(AircraftType::EMERGENCY, AircraftSize::LARGE);
         $this->createAircraft(AircraftType::CARGO, AircraftSize::SMALL);
         $this->createAircraft(AircraftType::PASSENGER, AircraftSize::SMALL);
         $this->createAircraft(AircraftType::PASSENGER, AircraftSize::LARGE);
@@ -60,10 +60,10 @@ class ListQueueServiceTest extends TestCase
             $newArray[] = [$item->toArray(), ['enqueued_at' => $item->createdAt]];
         }
         file_put_contents(__DIR__."/../../../results/listQueue.txt", json_encode($newArray));
-
+        assertEquals(26, count($queue));
+        assertEquals(AircraftType::EMERGENCY, $queue[0]->type);
+        assertEquals(AircraftSize::LARGE, $queue[0]->size);
     }
-
-
 
     public function createAircraft($type, $size)
     {
@@ -79,7 +79,6 @@ class ListQueueServiceTest extends TestCase
         );
         
         EnqueueAircraftService::execute($aircraft->id);
-        sleep(3);
     }
 
     public function tearDown(): void

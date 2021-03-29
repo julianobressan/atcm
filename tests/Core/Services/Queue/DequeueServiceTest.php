@@ -4,6 +4,7 @@ use ATCM\Core\Exceptions\NotAllowedException;
 use ATCM\Core\Services\Aircraft\CreateAircraftService;
 use ATCM\Core\Services\Queue\DequeueService;
 use ATCM\Core\Services\Queue\EnqueueAircraftService;
+use ATCM\Core\Services\Queue\ListQueueService;
 use ATCM\Core\Services\System\BootSystemService;
 use ATCM\Core\Services\System\HaltSystemService;
 use ATCM\Data\Models\Aircraft;
@@ -26,36 +27,58 @@ class DequeueServiceTest extends TestCase
 
     public function testExecute()
     {
-        $aircraft = $this->createAircraft();
+        $this->createAircraft(AircraftType::CARGO, AircraftSize::SMALL);
+        $this->createAircraft(AircraftType::VIP, AircraftSize::SMALL);
+        $this->createAircraft(AircraftType::PASSENGER, AircraftSize::LARGE);
+        $this->createAircraft(AircraftType::EMERGENCY, AircraftSize::SMALL);
+        $this->createAircraft(AircraftType::PASSENGER, AircraftSize::SMALL);
+        $this->createAircraft(AircraftType::PASSENGER, AircraftSize::SMALL);
+        $this->createAircraft(AircraftType::PASSENGER, AircraftSize::LARGE);
+        $this->createAircraft(AircraftType::VIP, AircraftSize::SMALL);
+        $this->createAircraft(AircraftType::PASSENGER, AircraftSize::SMALL);
+        $this->createAircraft(AircraftType::PASSENGER, AircraftSize::LARGE);
+        $this->createAircraft(AircraftType::PASSENGER, AircraftSize::LARGE);
+        $this->createAircraft(AircraftType::VIP, AircraftSize::LARGE);
+        
 
-        EnqueueAircraftService::execute($aircraft->id);
-        assertEquals(1, count($aircraft->enqueued()));
+        $queue = ListQueueService::execute();
+        assertEquals(12, count($queue));
+        assertEquals(AircraftType::EMERGENCY, $queue[0]->type);
+        assertEquals(AircraftSize::SMALL, $queue[0]->size);
 
         DequeueService::execute();
-        assertEquals(1, count($aircraft->enqueued()));
+        $queue2 = ListQueueService::execute();
+        assertEquals(11, count($queue2));
+        assertEquals(AircraftType::VIP, $queue2[0]->type);
+        assertEquals(AircraftSize::LARGE, $queue2[0]->size);
+
+        DequeueService::execute();
+        $queue3 = ListQueueService::execute();
+        assertEquals(10, count($queue3));
+        assertEquals(AircraftType::VIP, $queue3[0]->type);
+        assertEquals(AircraftSize::SMALL, $queue3[0]->size);
+
+        DequeueService::execute();
+        $queue4 = ListQueueService::execute();
+        assertEquals(9, count($queue4));
+        assertEquals(AircraftType::VIP, $queue4[0]->type);
+        assertEquals(AircraftSize::SMALL, $queue4[0]->size);
     }
 
-    public function testExecuteWithHaltedSystem()
+    public function createAircraft($type, $size)
     {
-        $aircraft = $this->createAircraft();
+        $models = ["Embraer 190", "Airbus A330", "Boeing 747", "Learjet Legacy", "Embraer KC390", "Cessna C95", "Lockheed C130"];
+        $model = $models[random_int(0,count($models) - 1)];
 
-        HaltSystemService::execute();
-
-        $this->expectException(NotAllowedException::class);
-
-        DequeueService::execute();       
-    }
-
-    public function createAircraft()
-    {
         $random = random_int(1000,9999);
         $aircraft = CreateAircraftService::execute(
-            AircraftType::CARGO,
-            AircraftSize::LARGE,
-            "BRA".$random,
-            "Embraer 190"
+            $type,
+            $size,
+            chr(rand(65,90)).chr(rand(65,90)).chr(rand(65,90)).$random,
+            $model
         );
-        return $aircraft;
+        
+        EnqueueAircraftService::execute($aircraft->id);
     }
 
     public function tearDown(): void
