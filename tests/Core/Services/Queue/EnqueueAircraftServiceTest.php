@@ -1,7 +1,8 @@
 <?php
 
+use ATCM\Core\Exceptions\NotAllowedException;
 use ATCM\Core\Services\Aircraft\CreateAircraftService;
-use ATCM\Core\Services\Queue\AddAircraftToQueueService;
+use ATCM\Core\Services\Queue\EnqueueAircraftService;
 use ATCM\Core\Services\System\BootSystemService;
 use ATCM\Core\Services\System\HaltSystemService;
 use ATCM\Data\Models\Aircraft;
@@ -12,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
 
-class AddAircraftToQueueServiceTest extends TestCase
+class EnqueueAircraftServiceTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -26,11 +27,11 @@ class AddAircraftToQueueServiceTest extends TestCase
     {
         $aircraft = $this->createAircraft();
 
-        AddAircraftToQueueService::execute($aircraft->id);
+        EnqueueAircraftService::execute($aircraft->id);
         assertEquals(1, count($aircraft->enqueued()));
 
         $this->expectException(NotAllowedException::class);
-        AddAircraftToQueueService::execute($aircraft->id);
+        EnqueueAircraftService::execute($aircraft->id);
     }
 
     public function testExecuteWithHaltedSystem()
@@ -41,7 +42,7 @@ class AddAircraftToQueueServiceTest extends TestCase
 
         $this->expectException(NotAllowedException::class);
 
-        AddAircraftToQueueService::execute($aircraft->id);       
+        EnqueueAircraftService::execute($aircraft->id);       
     }
 
     public function createAircraft()

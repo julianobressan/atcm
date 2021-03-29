@@ -1,0 +1,392 @@
+[
+    [
+       {
+          "id":"1070",
+          "flightNumber":"UBE3440",
+          "model":"Cessna C95",
+          "type":"emergency",
+          "size":"small",
+          "createdAt":"2021-03-29 03:53:53",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:53:53"
+       }
+    ],
+    [
+       {
+          "id":"1083",
+          "flightNumber":"IDI2346",
+          "model":"Airbus A330",
+          "type":"emergency",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:32",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:32"
+       }
+    ],
+    [
+       {
+          "id":"1089",
+          "flightNumber":"OSD7299",
+          "model":"Boeing 747",
+          "type":"emergency",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:51",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:51"
+       }
+    ],
+    [
+       {
+          "id":"1078",
+          "flightNumber":"VMK4506",
+          "model":"Lockheed C130",
+          "type":"vip",
+          "size":"large",
+          "createdAt":"2021-03-29 03:54:17",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:17"
+       }
+    ],
+    [
+       {
+          "id":"1091",
+          "flightNumber":"REY3012",
+          "model":"Learjet Legacy",
+          "type":"vip",
+          "size":"large",
+          "createdAt":"2021-03-29 03:54:57",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:57"
+       }
+    ],
+    [
+       {
+          "id":"1068",
+          "flightNumber":"MYI8911",
+          "model":"Learjet Legacy",
+          "type":"vip",
+          "size":"small",
+          "createdAt":"2021-03-29 03:53:47",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:53:47"
+       }
+    ],
+    [
+       {
+          "id":"1074",
+          "flightNumber":"OUU8639",
+          "model":"Learjet Legacy",
+          "type":"vip",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:05",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:05"
+       }
+    ],
+    [
+       {
+          "id":"1081",
+          "flightNumber":"HSU7688",
+          "model":"Learjet Legacy",
+          "type":"vip",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:26",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:26"
+       }
+    ],
+    [
+       {
+          "id":"1087",
+          "flightNumber":"JMN1179",
+          "model":"Airbus A330",
+          "type":"vip",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:44",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:44"
+       }
+    ],
+    [
+       {
+          "id":"1069",
+          "flightNumber":"KEV8442",
+          "model":"Lockheed C130",
+          "type":"passenger",
+          "size":"large",
+          "createdAt":"2021-03-29 03:53:50",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:53:50"
+       }
+    ],
+    [
+       {
+          "id":"1073",
+          "flightNumber":"LWF2268",
+          "model":"Boeing 747",
+          "type":"passenger",
+          "size":"large",
+          "createdAt":"2021-03-29 03:54:02",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:02"
+       }
+    ],
+    [
+       {
+          "id":"1076",
+          "flightNumber":"PDK1658",
+          "model":"Lockheed C130",
+          "type":"passenger",
+          "size":"large",
+          "createdAt":"2021-03-29 03:54:11",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:11"
+       }
+    ],
+    [
+       {
+          "id":"1077",
+          "flightNumber":"ZDR4539",
+          "model":"Boeing 747",
+          "type":"passenger",
+          "size":"large",
+          "createdAt":"2021-03-29 03:54:14",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:14"
+       }
+    ],
+    [
+       {
+          "id":"1082",
+          "flightNumber":"VHV1127",
+          "model":"Boeing 747",
+          "type":"passenger",
+          "size":"large",
+          "createdAt":"2021-03-29 03:54:29",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:29"
+       }
+    ],
+    [
+       {
+          "id":"1086",
+          "flightNumber":"QLG1269",
+          "model":"Cessna C95",
+          "type":"passenger",
+          "size":"large",
+          "createdAt":"2021-03-29 03:54:41",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:41"
+       }
+    ],
+    [
+       {
+          "id":"1090",
+          "flightNumber":"YMJ3678",
+          "model":"Boeing 747",
+          "type":"passenger",
+          "size":"large",
+          "createdAt":"2021-03-29 03:54:54",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:54"
+       }
+    ],
+    [
+       {
+          "id":"1092",
+          "flightNumber":"VNT4763",
+          "model":"Airbus A330",
+          "type":"passenger",
+          "size":"large",
+          "createdAt":"2021-03-29 03:55:00",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:55:00"
+       }
+    ],
+    [
+       {
+          "id":"1071",
+          "flightNumber":"AGN6134",
+          "model":"Airbus A330",
+          "type":"passenger",
+          "size":"small",
+          "createdAt":"2021-03-29 03:53:56",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:53:56"
+       }
+    ],
+    [
+       {
+          "id":"1072",
+          "flightNumber":"SYA9530",
+          "model":"Learjet Legacy",
+          "type":"passenger",
+          "size":"small",
+          "createdAt":"2021-03-29 03:53:59",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:53:59"
+       }
+    ],
+    [
+       {
+          "id":"1075",
+          "flightNumber":"SSP6861",
+          "model":"Embraer 190",
+          "type":"passenger",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:08",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:08"
+       }
+    ],
+    [
+       {
+          "id":"1079",
+          "flightNumber":"KQL5774",
+          "model":"Embraer 190",
+          "type":"passenger",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:20",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:20"
+       }
+    ],
+    [
+       {
+          "id":"1085",
+          "flightNumber":"UXT6948",
+          "model":"Boeing 747",
+          "type":"passenger",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:38",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:38"
+       }
+    ],
+    [
+       {
+          "id":"1088",
+          "flightNumber":"BEN2622",
+          "model":"Embraer 190",
+          "type":"passenger",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:47",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:47"
+       }
+    ],
+    [
+       {
+          "id":"1067",
+          "flightNumber":"WJB5817",
+          "model":"Boeing 747",
+          "type":"cargo",
+          "size":"small",
+          "createdAt":"2021-03-29 03:53:44",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:53:44"
+       }
+    ],
+    [
+       {
+          "id":"1080",
+          "flightNumber":"ZLT8784",
+          "model":"Airbus A330",
+          "type":"cargo",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:23",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:23"
+       }
+    ],
+    [
+       {
+          "id":"1084",
+          "flightNumber":"CKD1660",
+          "model":"Cessna C95",
+          "type":"cargo",
+          "size":"small",
+          "createdAt":"2021-03-29 03:54:35",
+          "updatedAt":null,
+          "deletedAt":null
+       },
+       {
+          "enqueued_at":"2021-03-29 03:54:35"
+       }
+    ]
+ ]

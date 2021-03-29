@@ -18,7 +18,7 @@ use LogicException;
  * @version 1.0.0
  * @copyright MIT
  */
-class AddAircraftToQueueService
+class EnqueueAircraftService
 {
     public static function execute($aircraftId)
     {
