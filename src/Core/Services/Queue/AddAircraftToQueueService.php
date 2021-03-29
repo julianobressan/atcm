@@ -7,6 +7,7 @@ use ATCM\Data\Enums\SystemStatus;
 use ATCM\Data\Models\Aircraft;
 use ATCM\Data\Models\Queue;
 use Exception;
+use InvalidArgumentException;
 use LogicException;
 
 /**
@@ -25,6 +26,17 @@ class AddAircraftToQueueService
             throw new LogicException("The system is not online. It is not possible to add an aircraft.");
         }
 
-        //$aircraftOnQueue = Que
+        $aircraft = Aircraft::find($aircraftId);
+        if(is_null($aircraft)) {
+            throw new InvalidArgumentException("Aircraft ID %s was not found.", $aircraftId);
+        }
+
+        if(count($aircraft->enqueued()) > 0) {
+            throw new LogicException(sprintf("Aircraft ID %s is already on the queue. It is not possible to add twice.", $aircraftId));
+        }
+
+        $queue = new Queue();
+        $queue->aircraftId = $aircraftId;
+        $queue->save();
     }
 }
