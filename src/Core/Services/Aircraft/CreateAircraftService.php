@@ -2,6 +2,9 @@
 
 namespace ATCM\Core\Services\Aircraft;
 
+use ATCM\Core\Exceptions\InvalidParameterException;
+use ATCM\Core\Exceptions\NotAllowedException;
+use ATCM\Core\Helpers\AutoGenerateHelper;
 use ATCM\Data\Enums\AircraftSize;
 use ATCM\Data\Enums\AircraftType;
 use ATCM\Data\Models\Aircraft;
@@ -17,24 +20,15 @@ use LogicException;
  */
 class CreateAircraftService
 {
-    public static function execute(string $type, string $size, string $flightNumber, string $model)
-    {
-        $existingAircraft = Aircraft::first("flight_number LIKE '{$flightNumber}'");
-        if(!is_null($existingAircraft)) throw new LogicException(sprintf("It already exists a aircraft with %s flight number", $flightNumber));
-
-        if(!in_array($type, [AircraftType::VIP, AircraftType::EMERGENCY, AircraftType::CARGO, AircraftType::PASSENGER])) {
-            throw new InvalidArgumentException(sprintf("The informed type %s is not valid. Please, check the documentation.", $type));
-        }
-
+    public static function execute(string $size, $flightNumber = null, $model = null)
+    {      
         if(!in_array($size, [AircraftSize::LARGE, AircraftSize::SMALL])) {
-            throw new InvalidArgumentException(sprintf("The informed size %s is not valid. Please, check the documentation.", $size));
+            throw new InvalidParameterException(sprintf("The informed size %s is not valid. Please, check the documentation.", $size), 112, 406);
         }
 
         $aircraft = new Aircraft();
-        $aircraft->type = $type;
         $aircraft->size = $size;
-        $aircraft->flightNumber = $flightNumber;
-        $aircraft->model = $model;
+        $aircraft->model = $model ?? AutoGenerateHelper::generateModel($size);
         $aircraft->save();
 
         return $aircraft;

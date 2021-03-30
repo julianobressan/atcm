@@ -33,7 +33,7 @@ final class Database
      * @return PDO
      */
     private static function make(): \PDO
-    {               
+    {              
         $dbType = $_ENV['DB_TYPE'];
         $dbHost = $_ENV['DB_HOST'];
         $dbPort = $_ENV['DB_PORT'];
@@ -60,8 +60,9 @@ final class Database
                     break;
             }
         } else {
-            throw new DataAccessException('Database connection data is missing');
+            throw new DataAccessException('Database connection data is missing', 2, 503);
         }
+       
     }
 
     /**

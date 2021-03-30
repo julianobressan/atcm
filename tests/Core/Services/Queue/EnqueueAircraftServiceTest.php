@@ -9,6 +9,7 @@ use ATCM\Data\Models\Aircraft;
 use ATCM\Data\Models\Queue;
 use ATCM\Data\Enums\AircraftSize;
 use ATCM\Data\Enums\AircraftType;
+use ATCM\Data\Enums\FlightType;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
@@ -27,11 +28,11 @@ class EnqueueAircraftServiceTest extends TestCase
     {
         $aircraft = $this->createAircraft();
 
-        EnqueueAircraftService::execute($aircraft->id);
+        EnqueueAircraftService::execute($aircraft->id, FlightType::EMERGENCY);
         assertEquals(1, count($aircraft->enqueued()));
 
         $this->expectException(NotAllowedException::class);
-        EnqueueAircraftService::execute($aircraft->id);
+        EnqueueAircraftService::execute($aircraft->id, FlightType::EMERGENCY);
     }
 
     public function testExecuteWithHaltedSystem()
@@ -42,17 +43,14 @@ class EnqueueAircraftServiceTest extends TestCase
 
         $this->expectException(NotAllowedException::class);
 
-        EnqueueAircraftService::execute($aircraft->id);       
+        EnqueueAircraftService::execute($aircraft->id, FlightType::EMERGENCY);       
     }
 
     public function createAircraft()
     {
         $random = random_int(1000,9999);
         $aircraft = CreateAircraftService::execute(
-            AircraftType::CARGO,
-            AircraftSize::LARGE,
-            "BRA".$random,
-            "Embraer 190"
+            AircraftSize::LARGE
         );
         return $aircraft;
     }

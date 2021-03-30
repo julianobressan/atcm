@@ -27,3 +27,48 @@ DB_PASS="mypassword"
 ```
 
 In your first run, the program will create the database schema. The name for schema will be **atcm**. If you do want to use another name for schema, edit the `.env` file before running. If you prefer run the database installed directly in your host system or another host, ensure that correct credentials are filled on .env file and database user have permissions to create databases and tables, select, insert, deleted and update statements.
+
+## REST API
+
+### Queue
+
+* GET /queue
+* POST /queue/
+    {
+        "aircratId": "9999"
+    }
+* DELETE /queue/{aicraftId}
+
+### Aircraft
+
+* GET /aircraft
+* GET /aircraft/{id}
+* POST /aircraft/
+    {
+        "type": "{string}",
+        "size": "{string}",
+        "model": "{string}",
+        "flightNumber": "{string}"
+    }
+* DELETE /aircraft/{aicraftId}
+
+### User
+
+* GET /user
+* GET /user/{id}
+* POST /user/
+    {
+        "login": "{string}",
+        "name": "{string}",
+        "password": "{string}"
+    }
+* DELETE /user/{aicraftId}
+
+### Session
+* POST /session
+{
+    "login": "{string}",
+    "password": "{string}"
+}
+* DELETE /session/{token}
+

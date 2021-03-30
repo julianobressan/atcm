@@ -2,7 +2,7 @@
 
 namespace ATCM\Data\Enums;
 
-class AircraftType {
+class FlightType {
     
     const EMERGENCY = 'emergency';
 

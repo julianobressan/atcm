@@ -2,12 +2,11 @@
 
 namespace ATCM\Core\Services\Queue;
 
+use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Core\Exceptions\NotAllowedException;
 use ATCM\Core\Services\System\GetSystemStatusService;
 use ATCM\Data\Enums\SystemStatus;
-use ATCM\Data\Models\Aircraft;
 use ATCM\Data\Models\Queue;
-use InvalidArgumentException;
 
 /**
  * Add an aircraft to queue
@@ -18,18 +17,38 @@ use InvalidArgumentException;
  */
 class DequeueService
 {
-    public static function execute()
+    public static function execute(int $flightId)
     {
         $statusSystem = GetSystemStatusService::execute();
         if ($statusSystem != SystemStatus::ONLINE) {
-            throw new NotAllowedException("The system is not online. It is not possible to add an aircraft.");
+            throw new NotAllowedException("The system is not online. It is not possible to add an aircraft.", 102, 425);
         }
 
-        $aircraftsQueue = ListQueueService::execute();
-        if(count($aircraftsQueue) === 0) {
-            throw new NotAllowedException("There is no aircraft on queue. It is not possible to dequeue.");
+        $flightsQueue = ListQueueService::execute();
+        if(count($flightsQueue) === 0) {
+            throw new NotAllowedException("There is no flight on queue. It is not possible to dequeue.", 103, 406);
         }
-
-        $aircraftsQueue[0]->enqueued()[0]->delete();
+        $flight = $flightsQueue[0]['flight'];
+        if($flight->id == $flightId) {
+            $flight->delete();
+        } else {
+            $informedFlight = Queue::find($flightId, true);
+            if(is_null($informedFlight)) {
+                throw new InvalidParameterException("The informed flight does not exists.", 101, 404);
+            } else if(!is_null($informedFlight->deletedAt)) {
+                throw new NotAllowedException(
+                    "The informed flight is no longer in the queue. Probably was dequeued by other user.", 
+                    101, 
+                    409
+                );
+            } else {
+                throw new NotAllowedException(
+                    "The informed flight does not have the priority to dequeue.", 
+                    101, 
+                    409
+                );
+            }
+        }
+        
     }
 }

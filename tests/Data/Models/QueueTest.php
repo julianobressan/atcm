@@ -1,19 +1,18 @@
 <?php
 namespace Test\Data\Models;
 
+use ATCM\Core\Helpers\AutoGenerateHelper;
 use ATCM\Data\Enums\AircraftSize;
-use ATCM\Data\Enums\AircraftType;
+use ATCM\Data\Enums\FlightType;
 use ATCM\Data\Models\Aircraft;
 use ATCM\Data\Models\Queue;
 use PHPUnit\Framework\TestCase;
 
-use function PHPUnit\Framework\assertEmpty;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertIsInt;
 use function PHPUnit\Framework\assertNotNull;
-use function PHPUnit\Framework\assertNull;
-use function PHPUnit\Framework\assertObjectEquals;
-use function PHPUnit\Framework\assertSame;
+
 
 class QueueTest extends TestCase
 {
@@ -26,15 +25,15 @@ class QueueTest extends TestCase
     public function testCreateQueue()
     {
         $aircraft = Aircraft::create([
-            'model' => 'Boeing 777',
-            'flightNumber' => 'BRA9878',
             'size' => AircraftSize::LARGE,
-            'type' => AircraftType::VIP
+            'model' => AutoGenerateHelper::generateModel(AircraftSize::LARGE)
         ]);
         $aircraft->save();
         
         $queue = Queue::create();
         $queue->aircraftId = $aircraft->id;
+        $queue->flightType = FlightType::EMERGENCY;
+        $queue->flightNumber = AutoGenerateHelper::generateFlight();
         $queue->save();
 
         assertIsInt($queue->id);
@@ -54,19 +53,18 @@ class QueueTest extends TestCase
         
         $aircraft = Aircraft::create([
             'model' => 'Boeing 777',
-            'flightNumber' => 'BRA9878',
             'size' => AircraftSize::LARGE,
-            'type' => AircraftType::VIP
         ]);
         $aircraft->save();
         
         $queue = new Queue();
         $queue->aircraftId = $aircraft->id;
+        $queue->flightNumber = AutoGenerateHelper::generateFlight();
+        $queue->flightType = FlightType::EMERGENCY;
         $queue->save();
         
         $aircraft2 = $queue->aircraft();
         assertNotNull($aircraft2);
-        assertEquals('BRA9878', $aircraft2->flightNumber);
     }
 
     public function tearDown(): void

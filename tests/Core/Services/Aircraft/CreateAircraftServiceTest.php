@@ -20,7 +20,7 @@ class CreateAircraftServiceTest extends TestCase
     public function testExecute()
     {
         $number = random_int(1000,9999);
-        $aircraft = CreateAircraftService::execute(AircraftType::CARGO, AircraftSize::LARGE, "BRA" . $number, "Boeing 757");
+        $aircraft = CreateAircraftService::execute(AircraftSize::LARGE, "BRA" . $number, "Boeing 757");
         assertNotNull($aircraft);
     }
 

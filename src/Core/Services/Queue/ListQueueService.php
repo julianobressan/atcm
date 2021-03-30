@@ -2,14 +2,12 @@
 
 namespace ATCM\Core\Services\Queue;
 
-use ATCM\Core\Exceptions\NotAllowedException;
-use ATCM\Core\Services\System\GetSystemStatusService;
+use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Data\Enums\AircraftSize;
 use ATCM\Data\Enums\AircraftType;
-use ATCM\Data\Enums\SystemStatus;
-use ATCM\Data\Models\Aircraft;
+use ATCM\Data\Enums\FlightType;
 use ATCM\Data\Models\Queue;
-use InvalidArgumentException;
+use Exception;
 
 /**
  * Add an aircraft to queue
@@ -28,24 +26,39 @@ class ListQueueService
         $passengerList = [];
         $cargoList = [];
 
-        foreach($queue as $item) {
-            $aircraft = $item->aircraft();
-            switch($aircraft->type) {
-                case AircraftType::EMERGENCY: {
-                    $emergencyList[] = $aircraft;
+        foreach($queue as $flight) {
+            $aircraft = $flight->aircraft();
+            switch($flight->flightType) {
+                case FlightType::EMERGENCY: {
+                    $emergencyList[] = [
+                        'flight' => $flight,
+                        'aircraft' => $aircraft
+                    ];
                     break;
                 }
-                case AircraftType::VIP: {
-                    $vipList[] = $aircraft;
+                case FlightType::VIP: {
+                    $vipList[] = [
+                        'flight' => $flight,
+                        'aircraft' => $aircraft
+                    ];
                     break;
                 }
-                case AircraftType::PASSENGER: {
-                    $passengerList[] = $aircraft;
+                case FlightType::PASSENGER: {
+                    $passengerList[] = [
+                        'flight' => $flight,
+                        'aircraft' => $aircraft
+                    ];
                     break;
                 }
-                case AircraftType::CARGO: {
-                    $cargoList[] = $aircraft;
+                case FlightType::CARGO: {
+                    $cargoList[] = [
+                        'flight' => $flight,
+                        'aircraft' => $aircraft
+                    ];
                     break;
+                }
+                default: {
+                    throw new InvalidParameterException(sprintf("Invalid aircraft type: %s", $aircraft->type));
                 }
             }
         }
@@ -56,22 +69,23 @@ class ListQueueService
         $cargoListSorted = self::sortAircraftsOfSameType($cargoList);
 
         $finalList = [...$emergencyListSorted, ...$vipListSorted, ...$passengerListSorted, ...$cargoListSorted];
+
         return $finalList;
     }
 
-    private static function sortAircraftsOfSameType($aircrafts)
+    private static function sortAircraftsOfSameType($flights)
     {
-        usort($aircrafts, function($ac1, $ac2) {
-            if($ac1->size === $ac2->size) {
-                return $ac1->createdAt <=> $ac2->createdAt;
+        usort($flights, function($ac1, $ac2) {
+            if($ac1['aircraft']->size === $ac2['aircraft']->size) {
+                return $ac1['aircraft']->createdAt <=> $ac2['aircraft']->createdAt;
             }             
-            if($ac1->size === AircraftSize::SMALL) {
+            if($ac1['aircraft']->size === AircraftSize::SMALL) {
                 return 1;
             } else {
                 return -1;
             }
         });
-        return $aircrafts;
+        return $flights;
     }
 
 }

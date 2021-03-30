@@ -1,8 +1,9 @@
 <?php
-namespace Test\Data\Models;
 
+use ATCM\Core\Helpers\AutoGenerateHelper;
 use ATCM\Data\Enums\AircraftSize;
 use ATCM\Data\Enums\AircraftType;
+use ATCM\Data\Enums\FlightType;
 use ATCM\Data\Models\Aircraft;
 use ATCM\Data\Models\Queue;
 use PHPUnit\Framework\TestCase;
@@ -26,16 +27,12 @@ class AircraftTest extends TestCase
         $number = random_int(1000,9999);
 
         $aircraft = new Aircraft();
-        $aircraft->type = AircraftType::EMERGENCY;
         $aircraft->size = AircraftSize::SMALL;
         $aircraft->model = "Boeing 747";
-        $aircraft->flightNumber = "BRA" . $number;
 
         assertEquals(Aircraft::class, get_class($aircraft));
-        assertEquals(AircraftType::EMERGENCY, $aircraft->type);
         assertEquals(AircraftSize::SMALL, $aircraft->size);
         assertEquals("Boeing 747", $aircraft->model);
-        assertEquals("BRA" . $number, $aircraft->flightNumber);
 
         $id = $aircraft->save()->id;
         assertIsInt($aircraft->id);
@@ -51,16 +48,12 @@ class AircraftTest extends TestCase
         $number = random_int(1000,9999);
 
         $aircraft = new Aircraft();
-        $aircraft->type = AircraftType::EMERGENCY;
         $aircraft->size = AircraftSize::SMALL;
         $aircraft->model = "Boeing 747";
-        $aircraft->flightNumber = "BRA" . $number;
 
         assertEquals(Aircraft::class, get_class($aircraft));
-        assertEquals(AircraftType::EMERGENCY, $aircraft->type);
         assertEquals(AircraftSize::SMALL, $aircraft->size);
         assertEquals("Boeing 747", $aircraft->model);
-        assertEquals("BRA" . $number, $aircraft->flightNumber);
 
         $id = $aircraft->save()->id;
         assertIsInt($aircraft->id);
@@ -81,7 +74,6 @@ class AircraftTest extends TestCase
         $aircrafts = Aircraft::all();
 
         assertEquals(3, count($aircrafts));
-        assertEquals('BRA', substr($aircrafts[0]->flightNumber, 0, 3));
     }
 
     public function testUpdateAircraft()
@@ -130,20 +122,18 @@ class AircraftTest extends TestCase
 
     public function testEnqueued()
     {
-        $number = random_int(1000, 9999);
-        $aircraft = new Aircraft();
-        $aircraft->type = AircraftType::EMERGENCY;
-        $aircraft->size = AircraftSize::SMALL;
-        $aircraft->model = "Boeing 747";
-        $aircraft->flightNumber = "BRA" . $number;
-        $aircraft->save();
+        $aircraft = $this->createAircraft();
 
         $queue1 = new Queue();
         $queue1->aircraftId = $aircraft->id;
+        $queue1->flightNumber = AutoGenerateHelper::generateFlight();
+        $queue1->flightType = FlightType::EMERGENCY;
         $queue1->save();
 
         $queue2 = new Queue();
         $queue2->aircraftId = $aircraft->id;
+        $queue2->flightNumber = AutoGenerateHelper::generateFlight();
+        $queue2->flightType = FlightType::EMERGENCY;
         $queue2->save();
 
         assertEquals(2, count($aircraft->enqueued()));
@@ -159,19 +149,14 @@ class AircraftTest extends TestCase
         $aircrafts = Aircraft::all();
         foreach($aircrafts as $aircraft) {
             $aircraft->delete();
-        }
-
-       
+        }       
     }
 
     private function createAircraft()
     {
-        $number = random_int(1000, 9999);
         $aircraft = new Aircraft();
-        $aircraft->type = AircraftType::EMERGENCY;
         $aircraft->size = AircraftSize::SMALL;
         $aircraft->model = "Boeing 747";
-        $aircraft->flightNumber = "BRA" . $number;
         $aircraft->save();
         return $aircraft;
     }

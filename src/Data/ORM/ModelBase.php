@@ -47,8 +47,10 @@ abstract class ModelBase implements IModelBase
             return self::$database;
         } catch (DataAccessException $e) {
             throw new DataAccessException("It was not possible to create an instance of " . get_called_class() . 
-                " because connection problems.", 0, $e);
-        }   
+                " because connection problems.", 4, 503, $e);
+        } catch (\PDOException $ex) {
+            throw new DataAccessException('The database is offline or credentials are wrong.', 3, 503, $ex);
+        }
     }
 
     public function __set($parameter, $value)
@@ -121,7 +123,7 @@ abstract class ModelBase implements IModelBase
     
         $sql = 'SELECT * FROM ' . (is_null($table) ? strtolower($class) : $table);
         $sql .= ' WHERE ' . (is_null($idField) ? 'id' : $idField);
-        $sql .= " = {$id} " . ($includeDeleted ?: "AND deleted_at IS NULL") . ";";
+        $sql .= " = {$id} " . ($includeDeleted ? "" : "AND deleted_at IS NULL") . ";";
     
         $result = self::getConnection()->query($sql);
 
