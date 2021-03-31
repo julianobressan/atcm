@@ -69,6 +69,8 @@ Intending to allow auditing, removed objects in fact are not removed, but have a
 ### Naming conventions
 The names of entities are written always on singular, for models, controllers, routes and database tables. Models and controllers adopts PascalCase convention and database adopts snake_case. The conversion is automatic.
 
+Files that don't use namespacing, in API, are in camelCase. Files and classes that uses namespacing are in PascalCase.
+
 ## Third-part packages
 It was used the following packages in this software:
 * **slim/slim**: A mini-framework to create REST APIs, widely used for this proposal;
