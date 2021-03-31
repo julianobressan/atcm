@@ -258,8 +258,8 @@ Attending the deadline, some enhancements stayed out. But, if I had time, I woul
 * Auditing table and artifacts, for all actions of users in the system;
 * More routes, placing them in different router files, adopting closures for that;
 * Catalog of custom error codes for troubleshooting;
-* Configure Monolog sending to administrator email critical errors;e
-* An user interface for autenticating and management of aircrafts, flights queue and view auditing logs, with different permission types, like "controller" and "supervisor";
+* Configure Monolog sending to administrator email critical errors; and
+* An user interface for autenticating and management of aircrafts, flights queue and view auditing logs, with different ACLs, like "controller" and "supervisor".
 
 ## Author's notes
 
