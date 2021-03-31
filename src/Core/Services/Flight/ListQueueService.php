@@ -1,6 +1,6 @@
 <?php
 
-namespace ATCM\Core\Services\Queue;
+namespace ATCM\Core\Services\Flight;
 
 use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Core\Exceptions\NotAllowedException;
@@ -9,7 +9,7 @@ use ATCM\Core\Services\System\GetSystemStatusService;
 use ATCM\Data\Enums\AircraftSize;
 use ATCM\Data\Enums\FlightType;
 use ATCM\Data\Enums\SystemStatus;
-use ATCM\Data\Models\Queue;
+use ATCM\Data\Models\Flight;
 
 /**
  * Add an aircraft to queue
@@ -24,16 +24,16 @@ class ListQueueService implements IService
     {
         $statusSystem = GetSystemStatusService::execute();
         if ($statusSystem != SystemStatus::ONLINE) {
-            throw new NotAllowedException("The system is not online. It is not possible to add an aircraft.", 102, 425);
+            throw new NotAllowedException("The system is not online. It is not possible to list flights.", 102, 425);
         }
 
-        $queue = Queue::all();
+        $flights = Flight::all();
         $emergencyList = [];
         $vipList = [];
         $passengerList = [];
         $cargoList = [];
 
-        foreach($queue as $flight) {
+        foreach($flights as $flight) {
             $aircraft = $flight->aircraft();
             switch($flight->flightType) {
                 case FlightType::EMERGENCY: {

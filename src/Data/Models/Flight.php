@@ -5,7 +5,7 @@ namespace ATCM\Data\Models;
 use ATCM\Data\ORM\ModelBase;
 use ATCM\Data\Interfaces\IModelBase;
 
-class Queue extends ModelBase
+class Flight extends ModelBase
 {
     protected bool $timestamps = true;
 

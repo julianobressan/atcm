@@ -1,6 +1,6 @@
 <?php
 
-namespace ATCM\Core\Services\Queue;
+namespace ATCM\Core\Services\Flight;
 
 use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Core\Exceptions\NotAllowedException;
@@ -10,7 +10,7 @@ use ATCM\Core\Services\System\GetSystemStatusService;
 use ATCM\Data\Enums\FlightType;
 use ATCM\Data\Enums\SystemStatus;
 use ATCM\Data\Models\Aircraft;
-use ATCM\Data\Models\Queue;
+use ATCM\Data\Models\Flight;
 
 /**
  * Add an aircraft to queue
@@ -28,7 +28,7 @@ class EnqueueAircraftService implements IService
         }
         $statusSystem = GetSystemStatusService::execute();
         if ($statusSystem != SystemStatus::ONLINE) {
-            throw new NotAllowedException("The system is not online. It is not possible to add an aircraft.", 105, 425);
+            throw new NotAllowedException("The system is not online. It is not possible to add a flight to queue.", 105, 425);
         }
 
         if(!in_array($flightType, [FlightType::VIP, FlightType::EMERGENCY, FlightType::CARGO, FlightType::PASSENGER])) {
@@ -44,7 +44,7 @@ class EnqueueAircraftService implements IService
             throw new InvalidParameterException(sprintf("Aircraft ID %s was not found.", $aircraftId), 106, 404);
         }
 
-        if(count($aircraft->enqueued()) > 0) {
+        if(count($aircraft->flights()) > 0) {
             throw new NotAllowedException(
                 sprintf("Aircraft ID %s is already on the queue. It is not possible to add twice.", $aircraftId), 
                 107, 
@@ -52,10 +52,10 @@ class EnqueueAircraftService implements IService
             );
         }
 
-        $queue = new Queue();
-        $queue->aircraftId = $aircraftId;
-        $queue->flightType = $flightType;
-        $queue->flightNumber = $flightNumber ?? AutoGenerateHelper::generateFlight();
-        $queue->save();
+        $flight = new Flight();
+        $flight->aircraftId = $aircraftId;
+        $flight->flightType = $flightType;
+        $flight->flightNumber = $flightNumber ?? AutoGenerateHelper::generateFlight();
+        $flight->save();
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace ATCM\Core\Services\Queue;
+namespace ATCM\Core\Services\Flight;
 
 use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Core\Exceptions\NotAllowedException;
 use ATCM\Core\Interfaces\IService;
 use ATCM\Core\Services\System\GetSystemStatusService;
 use ATCM\Data\Enums\SystemStatus;
-use ATCM\Data\Models\Queue;
+use ATCM\Data\Models\Flight;
 
 /**
  * Add an aircraft to queue
@@ -23,15 +23,19 @@ class DequeueService implements IService
         if(empty($flightId)) {
             throw new InvalidParameterException("Flight ID cannot be empty.", 103, 406);
         }
+        $statusSystem = GetSystemStatusService::execute();
+        if ($statusSystem != SystemStatus::ONLINE) {
+            throw new NotAllowedException("The system is not online. It is not possible to dequeue flights.", 102, 425);
+        }
         $flightsQueue = ListQueueService::execute();
         if(count($flightsQueue) === 0) {
-            throw new NotAllowedException("There is no flight on queue. It is not possible to dequeue.", 103, 406);
+            throw new NotAllowedException("There is no flight on queue. It is not possible to dequeue a flight.", 103, 406);
         }
         $flight = $flightsQueue[0]['flight'];
         if($flight->id == $flightId) {
             $flight->delete();
         } else {
-            $informedFlight = Queue::find($flightId, true);
+            $informedFlight = Flight::find($flightId, true);
             if(is_null($informedFlight)) {
                 throw new InvalidParameterException("The informed flight does not exists.", 101, 404);
             } else if(!is_null($informedFlight->deletedAt)) {

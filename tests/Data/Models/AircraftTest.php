@@ -5,7 +5,7 @@ use ATCM\Data\Enums\AircraftSize;
 use ATCM\Data\Enums\AircraftType;
 use ATCM\Data\Enums\FlightType;
 use ATCM\Data\Models\Aircraft;
-use ATCM\Data\Models\Queue;
+use ATCM\Data\Models\Flight;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEmpty;
@@ -124,24 +124,24 @@ class AircraftTest extends TestCase
     {
         $aircraft = $this->createAircraft();
 
-        $queue1 = new Queue();
+        $queue1 = new Flight();
         $queue1->aircraftId = $aircraft->id;
         $queue1->flightNumber = AutoGenerateHelper::generateFlight();
         $queue1->flightType = FlightType::EMERGENCY;
         $queue1->save();
 
-        $queue2 = new Queue();
+        $queue2 = new Flight();
         $queue2->aircraftId = $aircraft->id;
         $queue2->flightNumber = AutoGenerateHelper::generateFlight();
         $queue2->flightType = FlightType::EMERGENCY;
         $queue2->save();
 
-        assertEquals(2, count($aircraft->enqueued()));
+        assertEquals(2, count($aircraft->flights()));
     }
 
     public function tearDown(): void
     {
-        $queues = Queue::all();
+        $queues = Flight::all();
         foreach($queues as $queue) {
             $queue->delete();
         }

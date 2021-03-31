@@ -1,7 +1,7 @@
 <?php
 
 use ATCM\Core\Controllers\AircraftController;
-use ATCM\Core\Controllers\QueueController;
+use ATCM\Core\Controllers\FlightController;
 use ATCM\Core\Controllers\SessionController;
 use ATCM\Core\Controllers\SystemController;
 use Slim\App;
@@ -11,9 +11,9 @@ use Slim\App;
 return function (App $app) {
     $app->post('/session', SessionController::class . ':create');
     
-    $app->get('/queue', QueueController::class . ':list');
-    $app->post('/queue', QueueController::class . ':enqueue');
-    $app->delete('/queue/{aircraftId}', QueueController::class . ':dequeue');
+    $app->get('/queue', FlightController::class . ':list');
+    $app->post('/queue', FlightController::class . ':enqueue');
+    $app->delete('/queue/{aircraftId}', FlightController::class . ':dequeue');
     //setQueueRoutes($app);
 
     $app->get('/aircraft', AircraftController::class . ':list');

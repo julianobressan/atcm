@@ -5,7 +5,7 @@ use ATCM\Core\Helpers\AutoGenerateHelper;
 use ATCM\Data\Enums\AircraftSize;
 use ATCM\Data\Enums\FlightType;
 use ATCM\Data\Models\Aircraft;
-use ATCM\Data\Models\Queue;
+use ATCM\Data\Models\Flight;
 use PHPUnit\Framework\TestCase;
 
 
@@ -14,7 +14,7 @@ use function PHPUnit\Framework\assertIsInt;
 use function PHPUnit\Framework\assertNotNull;
 
 
-class QueueTest extends TestCase
+class FlightTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -22,7 +22,7 @@ class QueueTest extends TestCase
         $dotenv->load();
     }
 
-    public function testCreateQueue()
+    public function testCreateFlight()
     {
         $aircraft = Aircraft::create([
             'size' => AircraftSize::LARGE,
@@ -30,7 +30,7 @@ class QueueTest extends TestCase
         ]);
         $aircraft->save();
         
-        $queue = Queue::create();
+        $queue = Flight::create();
         $queue->aircraftId = $aircraft->id;
         $queue->flightType = FlightType::EMERGENCY;
         $queue->flightNumber = AutoGenerateHelper::generateFlight();
@@ -38,13 +38,11 @@ class QueueTest extends TestCase
 
         assertIsInt($queue->id);
 
-        //Queue::destroy($queue->id);
-        //Aircraft::destroy($aircraft->id);
         $queue->delete();
         $aircraft->delete();
 
         assertEquals(0, Aircraft::count());
-        assertEquals(0, Queue::count());
+        assertEquals(0, Flight::count());
 
     }
 
@@ -57,7 +55,7 @@ class QueueTest extends TestCase
         ]);
         $aircraft->save();
         
-        $queue = new Queue();
+        $queue = new Flight();
         $queue->aircraftId = $aircraft->id;
         $queue->flightNumber = AutoGenerateHelper::generateFlight();
         $queue->flightType = FlightType::EMERGENCY;
@@ -69,7 +67,7 @@ class QueueTest extends TestCase
 
     public function tearDown(): void
     {
-        $queues = Queue::all();
+        $queues = Flight::all();
         foreach($queues as $queue) {
             $queue->delete();
         }

@@ -5,13 +5,13 @@ namespace ATCM\Core\Controllers;
 use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Core\Exceptions\RestAPIException;
 use ATCM\Core\Helpers\ErrorHandlerHelper;
-use ATCM\Core\Services\Queue\DequeueService;
-use ATCM\Core\Services\Queue\EnqueueAircraftService;
-use ATCM\Core\Services\Queue\ListQueueService;
+use ATCM\Core\Services\Flight\DequeueService;
+use ATCM\Core\Services\Flight\EnqueueAircraftService;
+use ATCM\Core\Services\Flight\ListQueueService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class QueueController
+class FlightController
 {
     public function list(Request $request, Response $response, array $args): Response
     {

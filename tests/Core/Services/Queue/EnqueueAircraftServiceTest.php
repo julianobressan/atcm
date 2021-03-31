@@ -2,13 +2,12 @@
 
 use ATCM\Core\Exceptions\NotAllowedException;
 use ATCM\Core\Services\Aircraft\CreateAircraftService;
-use ATCM\Core\Services\Queue\EnqueueAircraftService;
+use ATCM\Core\Services\Flight\EnqueueAircraftService;
 use ATCM\Core\Services\System\BootSystemService;
 use ATCM\Core\Services\System\HaltSystemService;
 use ATCM\Data\Models\Aircraft;
-use ATCM\Data\Models\Queue;
+use ATCM\Data\Models\Flight;
 use ATCM\Data\Enums\AircraftSize;
-use ATCM\Data\Enums\AircraftType;
 use ATCM\Data\Enums\FlightType;
 use PHPUnit\Framework\TestCase;
 
@@ -29,7 +28,7 @@ class EnqueueAircraftServiceTest extends TestCase
         $aircraft = $this->createAircraft();
 
         EnqueueAircraftService::execute($aircraft->id, FlightType::EMERGENCY);
-        assertEquals(1, count($aircraft->enqueued()));
+        assertEquals(1, count($aircraft->flights()));
 
         $this->expectException(NotAllowedException::class);
         EnqueueAircraftService::execute($aircraft->id, FlightType::EMERGENCY);
@@ -57,7 +56,7 @@ class EnqueueAircraftServiceTest extends TestCase
 
     public function tearDown(): void
     {
-        $queues = Queue::all();
+        $queues = Flight::all();
         foreach($queues as $queue) {
             $queue->delete();
         }

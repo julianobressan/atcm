@@ -8,8 +8,8 @@ class Aircraft extends ModelBase
 {
     protected bool $timestamps = true;
 
-    public function enqueued(): array
+    public function flights(): array
     {
-        return $this->hasMany(Queue::class);
+        return $this->hasMany(Flight::class);
     }
 }

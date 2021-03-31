@@ -48,7 +48,7 @@ if ($passwordHash === false) {
     exit("Password hash failed. Try again." . PHP_EOL);
 }
 
-if($md5 !== '0a2b691e83aacb5a1b7c390f086d555d') {
+if($md5 !== '8440516de359f30aac6f143822982738') {
     exit("SQL file was modified. Get the original database.sql file and try again." . PHP_EOL);
 }
 $pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
@@ -67,5 +67,5 @@ if(strtoupper($delete) == "Y" || empty($delete)) {
     echo "Skipping deletion of installation files" . PHP_EOL;
 } else goto deletefiles;
 
-echo "The system was sucefully installed." . PHP_EOL;
+echo "The system was sucessfully installed." . PHP_EOL;
 exit();

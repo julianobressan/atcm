@@ -20,7 +20,7 @@ CREATE TABLE `atcm`.`user` (
   `deleted_at` DATETIME NULL,
   PRIMARY KEY (`id`));
 
-CREATE TABLE `atcm`.`queue` (
+CREATE TABLE `atcm`.`flight` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `aircraft_id` INT UNSIGNED NOT NULL,
   `flight_type` ENUM('emergency', 'vip', 'passenger', 'cargo') NOT NULL,
@@ -29,8 +29,8 @@ CREATE TABLE `atcm`.`queue` (
   `updated_at` DATETIME NULL,
   `deleted_at` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_queue_aircraft_idx` (`aircraft_id` ASC) VISIBLE,
-  CONSTRAINT `fk_queue_aircraft`
+  INDEX `fk_flight_aircraft_idx` (`aircraft_id` ASC) VISIBLE,
+  CONSTRAINT `fk_flight_aircraft`
     FOREIGN KEY (`aircraft_id`)
     REFERENCES `atcm`.`aircraft` (`id`)
     ON DELETE CASCADE

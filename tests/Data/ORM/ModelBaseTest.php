@@ -1,6 +1,6 @@
 <?php
 
-use Test\Data\Models\ExampleModel;
+use ATCM\Data\Models\Aircraft;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
@@ -10,7 +10,7 @@ class ModelBaseTest extends TestCase
     public function testCreateNewModel()
     {
         
-        $example = new ExampleModel();
+        $example = new Aircraft();
         $example->foo = 'bar';
 
         assertEquals('bar', $example->foo);
