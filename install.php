@@ -1,17 +1,30 @@
 <?php
 echo PHP_EOL . "Welcome to installation of Juliano Bressan's Air Traffic Control Manager" . PHP_EOL;
 echo "Check it out in https://github.com/julianobressan/atcm" . PHP_EOL. PHP_EOL;
+login:
 echo "Type a login name for administrator or let empty to use 'admin': " . PHP_EOL;
-$login = trim(fgets(STDIN));
+
+$login = strtolower(trim(fgets(STDIN)));
+system('stty echo');
 if(empty($login)) {
     $login = 'admin';
     echo "Login name assumed as 'admin'". PHP_EOL;
-} 
+} else if(!ctype_alpha($login)) {
+    echo "\033[31mOnly letters are allowed.\033[0m". PHP_EOL;
+    goto login;
+}
+password:
+if(empty($login)) {
+    $login = 'admin';
+    echo "Login name assumed as 'admin'". PHP_EOL;
+}
 echo "Type a password (minimum 6 characters): " . PHP_EOL;
+system('stty -echo');
 $password = trim(fgets(STDIN));
+system('stty echo');
 if(strlen($password) < 6) {   
     echo "\033[31mPassword too short.\033[0m". PHP_EOL;
-    exit();
+    goto password;
 }
 
 require __DIR__ . '/vendor/autoload.php';
@@ -54,10 +67,13 @@ if($md5 !== '8440516de359f30aac6f143822982738') {
 }
 
 $insertUser = "INSERT INTO `atcm`.`user` (`name`, `password`, `login`) VALUES ('Administrator', '{$passwordHash}', '{$login}');";
-$sql .= $insertUser;
+//$sql .= $insertUser;
 $pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
 $pdo->exec($sql);
-echo "\033[32mDatabase created\033[0m". PHP_EOL;
+echo "\033[32mDatabase `actm` created\033[0m". PHP_EOL;
+
+$pdo->exec($insertUser);
+echo "\033[32mAdministrator user ({$login}) created\033[0m". PHP_EOL;
 
 deletefiles:
 echo "It is recommended that database.sql and install.php files must be deleted, for security reasons. Do you want do delete now?" . PHP_EOL;
