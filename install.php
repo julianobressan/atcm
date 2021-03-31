@@ -52,12 +52,13 @@ if ($passwordHash === false) {
 if($md5 !== '8440516de359f30aac6f143822982738') {
     exit("\033[31mSQL file was modified. Get the original database.sql file and try again.\033[0m" . PHP_EOL);
 }
+
+$insertUser = "INSERT INTO `atcm`.`user` (`name`, `password`, `login`) VALUES ('Administrator', '{$passwordHash}', '{$login}');";
+$sql .= $insertUser;
 $pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
 $pdo->exec($sql);
 echo "\033[32mDatabase created\033[0m". PHP_EOL;
-$insertUser = "INSERT INTO `atcm`.`user` (`name`, `password`, `login`) VALUES 'Administrator', '{$passwordHash}', '{$login}');";
-$pdo->exec($insertUser);
-echo "\033[32mAdministrator user '{$login}' created\033[0m". PHP_EOL;
+
 deletefiles:
 echo "It is recommended that database.sql and install.php files must be deleted, for security reasons. Do you want do delete now?" . PHP_EOL;
 echo "[Y] / N" . PHP_EOL;
