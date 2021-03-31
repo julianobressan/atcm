@@ -2,14 +2,16 @@
 
 namespace ATCM\Core\Services\System;
 
- /**
+use ATCM\Core\Interfaces\IService;
+
+/**
  * Execute a verification if system is online, returning the status acording SystemStatus enum
  * 
  * @author Juliano Bressan <bressan.rs@gmail.com>
  * @version 1.0.0
  * @copyright MIT
  */
-class BootSystemService
+class BootSystemService implements IService
 {
     public static function execute()
     {

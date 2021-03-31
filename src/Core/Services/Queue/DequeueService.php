@@ -4,6 +4,7 @@ namespace ATCM\Core\Services\Queue;
 
 use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Core\Exceptions\NotAllowedException;
+use ATCM\Core\Interfaces\IService;
 use ATCM\Core\Services\System\GetSystemStatusService;
 use ATCM\Data\Enums\SystemStatus;
 use ATCM\Data\Models\Queue;
@@ -15,10 +16,13 @@ use ATCM\Data\Models\Queue;
  * @version 1.0.0
  * @copyright MIT
  */
-class DequeueService
+class DequeueService implements IService
 {
-    public static function execute(int $flightId)
+    public static function execute(int $flightId = null)
     {
+        if(empty($flightId)) {
+            throw new InvalidParameterException("Flight ID cannot be empty.", 103, 406);
+        }
         $flightsQueue = ListQueueService::execute();
         if(count($flightsQueue) === 0) {
             throw new NotAllowedException("There is no flight on queue. It is not possible to dequeue.", 103, 406);

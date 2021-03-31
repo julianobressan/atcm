@@ -4,6 +4,7 @@ namespace ATCM\Core\Services\Queue;
 
 use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Core\Exceptions\NotAllowedException;
+use ATCM\Core\Interfaces\IService;
 use ATCM\Core\Services\System\GetSystemStatusService;
 use ATCM\Data\Enums\AircraftSize;
 use ATCM\Data\Enums\FlightType;
@@ -17,7 +18,7 @@ use ATCM\Data\Models\Queue;
  * @version 1.0.0
  * @copyright MIT
  */
-class ListQueueService
+class ListQueueService implements IService
 {
     public static function execute()
     {

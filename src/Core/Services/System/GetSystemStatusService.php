@@ -2,6 +2,7 @@
 
 namespace ATCM\Core\Services\System;
 
+use ATCM\Core\Interfaces\IService;
 use ATCM\Data\Enums\SystemStatus;
 
  /**
@@ -11,7 +12,7 @@ use ATCM\Data\Enums\SystemStatus;
  * @version 1.0.0
  * @copyright MIT
  */
-class GetSystemStatusService
+class GetSystemStatusService implements IService
 {
     public static function execute(): string
     {

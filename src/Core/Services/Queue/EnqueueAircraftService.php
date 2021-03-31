@@ -5,6 +5,7 @@ namespace ATCM\Core\Services\Queue;
 use ATCM\Core\Exceptions\InvalidParameterException;
 use ATCM\Core\Exceptions\NotAllowedException;
 use ATCM\Core\Helpers\AutoGenerateHelper;
+use ATCM\Core\Interfaces\IService;
 use ATCM\Core\Services\System\GetSystemStatusService;
 use ATCM\Data\Enums\FlightType;
 use ATCM\Data\Enums\SystemStatus;
@@ -18,10 +19,13 @@ use ATCM\Data\Models\Queue;
  * @version 1.0.0
  * @copyright MIT
  */
-class EnqueueAircraftService
+class EnqueueAircraftService implements IService
 {
-    public static function execute($aircraftId, $flightType, $flightNumber = null)
+    public static function execute($aircraftId = null, $flightType = null, $flightNumber = null)
     {
+        if(empty($aircraftId)) {
+            throw new InvalidParameterException("Aitcraft ID cannot be empty.", 103, 406);
+        }
         $statusSystem = GetSystemStatusService::execute();
         if ($statusSystem != SystemStatus::ONLINE) {
             throw new NotAllowedException("The system is not online. It is not possible to add an aircraft.", 105, 425);
