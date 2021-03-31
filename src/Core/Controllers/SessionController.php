@@ -22,7 +22,7 @@ class SessionController
             $token = array(
                 "user" => $login,
                 "iat" => $nowSeconds,
-                "exp" => $nowSeconds+(60),  // Maximum expiration time is one minute
+                "exp" => $nowSeconds+($_ENV["JWT_EXPIRATION_TIME"] * 60),  // Maximum expiration time is one minute
                 "sub" => $login
             );
             
