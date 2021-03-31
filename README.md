@@ -109,6 +109,10 @@ You can use a database installed on your computer or a Docker container. For use
 
 `docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql`
 
+In next runnings, to up your container before using the software, just run:
+
+`docker start mysql-atcm`
+
 This way, the correct environment variables file is already filled with the credentials above. If you do prefer, you can change the name of container, password and port to others. Make sure to edit the `.env` file with new configurations. Example:
 
 `docker run --name mycontainer -p 4306:3306 -e MYSQL_ROOT_PASSWORD=mypassword -d mysql`
@@ -130,11 +134,11 @@ Before using the software, you have to clone repo, make some configurations and 
 
 1. Open your terminal in a desired diretory and lone the repository in your system:
 ```git clone https://github.com/julianobressan/atcm.git```
-2. Create a Docker container to serve the database: ```docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql```
-3. Run the installation script: ```php install.php```
+2. Create a Docker container to serve the database: `docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql`
+3. Run the installation script: `php install.php`
   - Follow the instructions in your terminal;
   - At the end, you will asked if do you want to delete the install.php script and database.sql file. It is recommended that you do that, but you can skip this step if it is your wish.
-4. Start the server, using the internal PHP web server: ```php -S localhost:8080 -t public public/index.php```
+4. Start the server, using the internal PHP web server: `php -S localhost:8080 -t public public/index.php`
 5. Import in your Insomnia application the [JSON file with endpoints](https://github.com/julianobressan/atcm/blob/de796950eb28a991ba24e6ae3a259bdd8150f158/documents/insomnia_endpoints.json);
 6. In Insomnia, run the request **Session/Create session**. Fill the body with login and password you provided in step 3. Copy returned token, click on Development environment then in Manage Environments, or simply press Ctrl+E. Fill the value of token key with copied token. It will be used to authenticate all required requests with the Bearer JWT token;
 7. Explore the API.
