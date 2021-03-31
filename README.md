@@ -51,6 +51,9 @@ This layers contains objects responsible to connect and manipulate the database 
 ### Entity Relationship Diagram
 ![Entity Relationship Diagram](https://github.com/julianobressan/atcm/blob/main/documents/er-diagram.png?raw=true)
 
+> "Modeling Principle: Models are not right or wrong; they are more or less useful."
+> - Martin Fowler
+
 ## Challenge compliance and considerations
 
 All requirements of exercise were implemented, by some changes were made, according my understanding of the domain. I understood that aircrafts are immutable, like size or other aditional data, like manufacturer, model, weight, etc. The kind of load, proposal of flight or emergency landing need are mutable and can change during the flight. So, I separated aircraft and flight in two entities:
@@ -138,22 +141,22 @@ Before using the software, you have to clone repo, make some configurations and 
 
 1. Open your terminal in a desired diretory and lone the repository in your system:
 
-```git clone https://github.com/julianobressan/atcm.git && cd atcm```
+  ```git clone https://github.com/julianobressan/atcm.git && cd atcm```
 
 2. Create a Docker container to serve the database: 
 
-`docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql`
+  `docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql`
 
 4. Run the installation script: 
 
-`php install.php`
+  `php install.php`
 
   - Follow the instructions in your terminal;
   - At the end, you will asked if do you want to delete the install.php script and database.sql file. It is recommended that you do that, but you can skip this step if it is your wish.
 
 5. Start the server, using the internal PHP web server: 
 
-`php -S localhost:8080 -t public public/index.php`
+  `php -S localhost:8080 -t public public/index.php`
 
 7. Import in your Insomnia application the [JSON file with endpoints](https://github.com/julianobressan/atcm/blob/de796950eb28a991ba24e6ae3a259bdd8150f158/documents/insomnia_endpoints.json);
 
