@@ -27,14 +27,14 @@ $pdo = null;
 if (!is_null($dbType) && !is_null($dbUser) && !is_null($dbPass) && !is_null($dbName) && !is_null($dbHost)) {
      $pdo =  new \PDO("mysql:host={$dbHost};port={$dbPort}", $dbUser, $dbPass);
 } else {
-    exit("Incorrect environment variables.". PHP_EOL);
+    exit("Incorrect environment variables." . PHP_EOL);
 }
 
 $stmt = $pdo->query("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{$dbName}'");
 $dbExists = (bool) $stmt->fetchColumn();
 
 if($dbExists) {
-    exit("Database already exists.".PHP_EOL);
+    exit("Database already exists." . PHP_EOL);
 }
 
 $sqlPath = __DIR__ . '/database.sql';
@@ -43,18 +43,27 @@ $md5 = md5_file($sqlPath);
 
 $passwordHash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 if ($passwordHash === false) {
-    throw new \Exception("Password hash failed. Try again.");
-    exit(0);
+    exit("Password hash failed. Try again." . PHP_EOL);
 }
 
 if($md5 !== '0a2b691e83aacb5a1b7c390f086d555d') {
-    throw new Exception("SQL file was modified. Get the original database.sql file and try again.");
-    exit(0);
+    exit("SQL file was modified. Get the original database.sql file and try again." . PHP_EOL);
 }
 $pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
 $pdo->exec($sql);
 
 $insertUser = "INSERT INTO `atcm`.`user` (`name`, `password`, `login`) VALUES 'Administrator', '{$passwordHash}', '{$login}');";
 
-echo "The system was sucefully installed. For security reasons, delete the install.php file.".PHP_EOL;
+deletefiles:
+echo "It is recommended that database.sql and install.php files must be deleted, for security reasons. Do you want do delete now?" . PHP_EOL;
+echo "[Y] / N" . PHP_EOL;
+$delete = trim(fgets(STDIN));
+if(strtoupper($delete) == "Y" || empty($delete)) {
+    unlink(__DIR__ . '/database.sql');
+    unlink(__FILE__);
+} else if(strtoupper($delete) == "N") {
+    echo "Skipping deletion of installation files" . PHP_EOL;
+} else goto deletefiles;
+
+echo "The system was sucefully installed." . PHP_EOL;
 exit();

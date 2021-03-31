@@ -19,11 +19,6 @@ class DequeueService
 {
     public static function execute(int $flightId)
     {
-        $statusSystem = GetSystemStatusService::execute();
-        if ($statusSystem != SystemStatus::ONLINE) {
-            throw new NotAllowedException("The system is not online. It is not possible to add an aircraft.", 102, 425);
-        }
-
         $flightsQueue = ListQueueService::execute();
         if(count($flightsQueue) === 0) {
             throw new NotAllowedException("There is no flight on queue. It is not possible to dequeue.", 103, 406);

@@ -3,8 +3,6 @@
 use Slim\Factory\AppFactory;
 use DI\Container;
 use Dotenv\Dotenv;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -16,10 +14,13 @@ AppFactory::setContainer($container);
 
 $app = AppFactory::create();
 
-$middleware = require __DIR__ . '/../src/API/Middlewares/errorHandlingMiddleware.php';
+$middleware = require __DIR__ . '/../src/API/middlewares/errorHandlingMiddleware.php';
 $middleware($app);
 
-$routes = require __DIR__ . '/../src/API/Routes/Router.php';
+$bootstrap = require __DIR__ . '/../src/API/config/bootstrap.php';
+$bootstrap($app);
+
+$routes = require __DIR__ . '/../src/API/routes/router.php';
 $routes($app);
 
 $app->run();

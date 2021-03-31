@@ -1,6 +1,5 @@
 <?php
 
-use ATCM\API\Middleware\ErrorRenderer;
 use Slim\App;
 
 return function (App $app) {

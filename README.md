@@ -1,10 +1,35 @@
 # atcm
 An Air Traffic Control Manager
 
+The proposal is to implement a basic system to management of air traffic control. The software was developed with pure PHP, using some basic components open source available on http://packagist.org. For persistance of date was chosen MySQL database system. The software was developed
+using techniques of clean code and best practices for programming, like PHP Standard Recommendations, Test-driven development and Domain-Driven Design.
+
+## Requirements
+
+* PHP 7.4 or newer
+* MySQL 8
+* Docker (recommended, but optional)
+
+## Third-part packages
+
+It was used the following packages in this software:
+* **slim/slim**: A mini-framework to create REST APIs, widely used for this proposal 
+* **slim/psr7**: A package required by **slim/slim** to attend PSR-7 and allows to create HTTP message interfaces
+* **monolog/monolog**: An excelent package for logging use by main PHP Frameworks currently
+* **vlucas/phpdotenv**: A simple package to read environment variables placed in a .env file and registering them globally
+* **php-di/php-di**: A package to Dependency Injection, used to create Containers on API REST of **slim/slim**
+* **tuupola/slim-basic-auth**:
+* **tuupola/slim-jwt-auth**: A package to allow **slim/slim** to authenticate JWT Bearer tokens
+* **firebase/php-jwt**: With this package the software is able to create JWT tokens
+
 ## Configuring the environment
 
+To run this software, follow instructions above or create a similar environment as you wish. It is recommended using a Linux distro for running.
 ### PHP
-PHP 7.4
+Make sure you have installed and enabled the following modules:
+* PDO
+* Rewrite
+* PHP-MySQL
 ### Web server
 
 ### Database
