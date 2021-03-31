@@ -1,4 +1,6 @@
 # ATCM
+![System architecture](https://reportercoragem.com.br/wp-content/uploads/2018/10/Dia-Mundial-do-Controlador-de-Tr%C3%A1fego-A%C3%A9reo.jpg)
+
 An Air Traffic Control Manager
 
 The proposal is to implement a basic system to management of air traffic control. The software was developed with pure PHP, using some basic components open source available on http://packagist.org. For persistance of date was chosen MySQL database system. The software was developed
@@ -6,6 +8,34 @@ using techniques of clean code and best practices for programming, like PHP Stan
 
 ## Development environment and resources
 For codgin was used IDE VS Code, Insomnia for REST API calls, PHPUnit for testing, XDebug for debugging and Docker for database service.
+
+## Architecture
+![System architecture](https://github.com/julianobressan/atcm/blob/main/documents/architecture.png?raw=true)
+
+### Layers
+
+Attending instructions for this challenge, the architecture was implemented with 3 layers.
+#### API
+It has the implementation of REST API, using Slim Framework and consists in 3 folders:
+* **config**:  Configurations about REST API;
+* **routes**: It contains all routes of API; and
+* **middlewares**: It contains middlewares used for error handling and authentication.
+
+#### Core
+This is the logical layer. It contains all classes that have the logical implementation of software, which is the middleware between API and Data layers.
+* **Controllers**: These objects are proxies to requests of API, redirecting callings to right services;
+* **Helpers**: Some helper classes
+* **Exceptions**: Implementation of custom exceptions for this software
+* **Services**: Contains the business rules for manipulation of data and responses for controllers. These objects really executes the instructions of software;
+
+#### Data
+
+
+#### Other files 
+
+
+### Entity Relationship Diagram
+![Entity Relationship Diagram](https://github.com/julianobressan/atcm/blob/main/documents/er-diagram.png?raw=true)
 
 ## Third-part packages
 It was used the following packages in this software:
@@ -72,25 +102,25 @@ Returns the actual queue of flights for landing. Returns a JSON array, where eac
  * Response: HTTP 200
 ```json
 [
-       {
-         "flight": {
-           "id": "5",
-           "aircraftId": "3",
-           "flightType": "passenger",
-           "flightNumber": "XF 8619",
-           "createdAt": "2021-03-31 00:28:49",
-           "updatedAt": null,
-           "deletedAt": null
-         },
-         "aircraft": {
-           "id": "3",
-           "model": "Antonov An-124",
-           "size": "large",
-           "createdAt": "2021-03-30 21:09:31",
-           "updatedAt": null,
-           "deletedAt": null
-         }
-       }
+    {
+        "flight": {
+        "id": "5",
+        "aircraftId": "3",
+        "flightType": "passenger",
+        "flightNumber": "XF 8619",
+        "createdAt": "2021-03-31 00:28:49",
+        "updatedAt": null,
+        "deletedAt": null
+        },
+        "aircraft": {
+        "id": "3",
+        "model": "Antonov An-124",
+        "size": "large",
+        "createdAt": "2021-03-30 21:09:31",
+        "updatedAt": null,
+        "deletedAt": null
+        }
+    }
 ]
 ```
 
@@ -100,8 +130,8 @@ Register a new flight, associated with an aircraft and have a type. The types ca
  * Body: JSON
 ```json
 {
-     "aircratId": "9999",
-     "type": "cargo"
+    "aircratId": "9999",
+    "type": "cargo"
 }
 ```
  * Response: HTTP 201
@@ -119,30 +149,36 @@ Gets a list of all aircrafts registeres
  * Response: HTTP 200
 ```json
 [
-      {
+    {
         "id": "1",
         "model": "Antonov An-225 Mriya",
         "size": "large",
         "createdAt": "2021-03-30 21:09:29",
         "updatedAt": null,
         "deletedAt": null
-      }
+    }
 ]
 ```
 
 * **POST /aircraft**
 Creates one aircrafto on software. It was expected that shall be provided information abaout **size** of aircraft, which can be **small** or **large**. Also, can be informed the **model** of aircraft (optional). If omitted model, software will take some random model for it.
-```json
-```
-    {
-        "size": "large",
-        "model": "Embraer KC390"
-    }
-```
-```
-* DELETE /aircraft/{aicraftId}
-```json
-```
+ * Header: Bearer token
+ * Body: JSON
+ ```json
+ {
+    "size": "large",
+    "model": "Embraer KC390"
+ }
+
+ * Response: HTTP 201
+ ```json
+ {
+    "size": "large",
+    "model": "Embraer KC39",
+    "id": 15
+ }
+ ```
+
 
 ### User
 
