@@ -122,8 +122,8 @@ See above all implemented endpoints, verbs, arguments and body when it is necess
 
 - **GET /queue** 
 Returns the actual queue of flights for landing. Returns a JSON array, where each position is similiar with result bellow:
- - Header: Bearer token
- - Response: HTTP 200
+  - Header: Bearer token
+  - Response: HTTP 200
 ```json
 [
     {
@@ -150,27 +150,27 @@ Returns the actual queue of flights for landing. Returns a JSON array, where eac
 
 - **POST /queue**
 Register a new flight, associated with an aircraft and have a type. The types can be: **emergency**, **vip**, **passenger** or **cargo**.
- - Header: Bearer token
- - Body: JSON
-```json
-{
+  - Header: Bearer token
+  - Body: JSON
+  ```json
+  {
     "aircratId": "9999",
     "type": "cargo"
-}
-```
+  }
+  ```
  - Response: HTTP 201
 
 * **DELETE /queue/{flightId}**
 Dequeues the first flight on the queue, according rules for priorization implemented. It expects the ID of flight. This parameter is required to prevent that an air traffic controller that are seeing an outdated list in your screen command to dequeue thinking in one flight and the system dequeues another. So, for example, if the controller are seeing the flight ID 9999 and command to dequeue expecting that this flight is to be dequeue, the software checks if at the moment of execution those flight still is the first to be dequeue on queue. If, during this time, another controller dequeued those flight, the system will warn that those flight was already dequeued.
- - Header: Bearer token
- - Response: HTTP 204
+  - Header: Bearer token
+  - Response: HTTP 204
 
 ### Aircrafts
 
 - **GET /aircraft** 
 Gets a list of all aircrafts registeres
- - Header: Bearer token
- - Response: HTTP 200
+  - Header: Bearer token
+  - Response: HTTP 200
 ```json
 [
     {
@@ -186,8 +186,8 @@ Gets a list of all aircrafts registeres
 
 - **POST /aircraft**
 Creates one aircrafto on software. It was expected that shall be provided information abaout **size** of aircraft, which can be **small** or **large**. Also, can be informed the **model** of aircraft (optional). If omitted model, software will take some random model for it.
- - Header: Bearer token
- - Body: JSON
+  - Header: Bearer token
+  - Body: JSON
  ```json
  {
     "size": "large",
@@ -204,8 +204,8 @@ Creates one aircrafto on software. It was expected that shall be provided inform
  ```
 
 ### Session
-- POST /session
-- Header: Bearer token
+ - POST /session
+ - Header: Bearer token
  - Body: JSON
  ```json
  {
