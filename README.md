@@ -60,6 +60,8 @@ System boot, halt or status normally are information that comes from a realtime 
 
 Operations with flights hypothetically cannot be performed if the system status is not online. To do that, you should boot the system first by calling the due endpoint. Other functions that depends only of database, like creating session, creating or listing aircrafts works even the system is offline, booting or halting.
 
+In the API, all endpoints, except create session, all protected by JWT authentication. So, for use them, you should authenticate first and put the token in the header of request. See more details bellow.
+
 ## Third-part packages
 It was used the following packages in this software:
 * **slim/slim**: A mini-framework to create REST APIs, widely used for this proposal;
