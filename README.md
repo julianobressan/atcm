@@ -4,6 +4,9 @@
 The proposal is to implement a basic system to management of air traffic control. The software was developed with (almost) pure PHP, using some basic components open source available on http://packagist.org. For persistance of data was chosen MySQL database system. The software was developed
 using techniques of clean code and best practices for programming, like PHP Standard Recommendations, Test-driven development and Domain-Driven Design.
 
+> "Any fool can write code that a computer can understand. Good programmers write code that humans can understand." - Martin Fowler
+> Refactoring: Improving the Design of Existing Code, 1999, p. 15
+
 Repository: https://github.com/julianobressan/atcm
 
 ## Development environment and resources
@@ -51,8 +54,8 @@ This layers contains objects responsible to connect and manipulate the database 
 ### Entity Relationship Diagram
 ![Entity Relationship Diagram](https://github.com/julianobressan/atcm/blob/main/documents/er-diagram.png?raw=true)
 
-> "Modeling Principle: Models are not right or wrong; they are more or less useful."
-> - Martin Fowler
+> "Modeling Principle: Models are not right or wrong; they are more or less useful." - Martin Fowler
+> Analysis Patterns: Reusable Object Models, 1997, p. 2
 
 ## Challenge compliance and considerations
 
