@@ -238,6 +238,6 @@ Creates one aircrafto on software. It was expected that shall be provided inform
 
 ## Author's notes
 
-1st Lieutenant Juliano Bressan - Brazilian Air Force Former Officer
+1st Lieutenant Juliano Bressan is a Brazilian Air Force Former Officer, graduate in information systems and acting as Software Engineer since 2008 and acting in many managerial roles since then. During 8 years, acted in Brazilian Air Force, developing software and managing IT services for Air Force organizations in several places of Brazil. Curiously, between supported organizations, were air traffic control centers (in Brazil, Air Force is the responsible for air traffic control).
 
 ![Ten Bressan](https://github.com/julianobressan/julianobressan/blob/master/ten_bressan.jpg?raw=true)
