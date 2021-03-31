@@ -193,7 +193,7 @@ Creates one aircrafto on software. It was expected that shall be provided inform
     "size": "large",
     "model": "Embraer KC390"
   }
-
+  ```
   - Response: HTTP 201
   ```json
   {
@@ -211,8 +211,8 @@ Creates one aircrafto on software. It was expected that shall be provided inform
   {
     "login": "admin",
     "password": "123456"
- }
-
+  }
+  ```
   - Response: HTTP 201
   ```json
   {
