@@ -12,11 +12,13 @@ class RestAPIException extends \Exception
         parent::__construct($message, $code, $previous);
     }
 
-    public function __toString() {
+    public function __toString() 
+    {
         return __CLASS__ . ": [{$this->code} | HTTP {$this->httpCode}]: {$this->message}\n";
     }
 
-    public function getHttpCode() {
+    public function getHttpCode(): int
+    {
         return $this->httpCode;
     }
 }
