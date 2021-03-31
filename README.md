@@ -1,5 +1,5 @@
 # Air Traffic Control Manager
-![System architecture](https://reportercoragem.com.br/wp-content/uploads/2018/10/Dia-Mundial-do-Controlador-de-Tr%C3%A1fego-A%C3%A9reo.jpg)
+![System architecture](https://github.com/julianobressan/atcm/blob/main/documents/header_atcm.jpg?raw=true)
 
 The proposal is to implement a basic system to management of air traffic control. The software was developed with pure PHP, using some basic components open source available on http://packagist.org. For persistance of data was chosen MySQL database system. The software was developed
 using techniques of clean code and best practices for programming, like PHP Standard Recommendations, Test-driven development and Domain-Driven Design.
