@@ -38,7 +38,7 @@ This layers contains objects responsible to connect and manipulate the database 
 * **public/**: This folder contains one only file, index.php, which is the gateway to API REST requests;
 * **tests/**: Contais all automated tests of PHPUnit;
 * **logs/**: Contains log files for unexpected errors. It could be monitored by a system of log monitoring;
-* **system_info/**: Mockup of information about the system availability;
+* **system_info/**: Mock of information about the system availability;
 * **documents/**: Just some documents of the software;
 * **.env**: File with environment variables for software usage;
 * **install.php**: Script for installation of the software database; and
@@ -57,6 +57,8 @@ All requirements of exercise were implemented, by some changes were made, accord
 The queue resumes the flights registered, sorting acording the requirements on exercise description.
 
 System boot, halt or status normally are information that comes from a realtime consulting to Operational System, RPC call or other component. It is inappropriate to store the status of the system on database. So, for this exercise, I created a mock to system status, simulating a verification of status by simply reading a text file placed in system_info folder. Realize that this file is a result of a request for system status that is managed by a complex component.
+
+Operations with flights hypothetically cannot be performed if the system status is not online. To do that, you should boot the system first by calling the due endpoint. Other functions that depends only of database, like creating session, creating or listing aircrafts works even the system is offline, booting or halting.
 
 ## Third-part packages
 It was used the following packages in this software:
