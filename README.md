@@ -141,6 +141,7 @@ Returns the actual queue of flights for landing. Returns a JSON array, where eac
   - Header: Bearer token
   - Response: HTTP 200
   ```json
+  Example
   [
     {
         "flight": {
@@ -169,6 +170,7 @@ Register a new flight, associated with an aircraft and have a type. The types ca
   - Header: Bearer token
   - Body: JSON
   ```json
+  Example
   {
     "aircratId": "9999",
     "type": "cargo"
@@ -188,6 +190,7 @@ Gets a list of all aircrafts registeres
   - Header: Bearer token
   - Response: HTTP 200
   ```json
+  Example
   [
     {
         "id": "1",
@@ -205,6 +208,7 @@ Creates one aircrafto on software. It was expected that shall be provided inform
   - Header: Bearer token
   - Body: JSON
   ```json
+  Example
   {
     "size": "large",
     "model": "Embraer KC390"
@@ -212,6 +216,7 @@ Creates one aircrafto on software. It was expected that shall be provided inform
   ```
   - Response: HTTP 201
   ```json
+  Example
   {
     "size": "large",
     "model": "Embraer KC39",
@@ -224,6 +229,7 @@ Creates one aircrafto on software. It was expected that shall be provided inform
   - Header: Bearer token
   - Body: JSON
   ```json
+  Example
   {
     "login": "admin",
     "password": "123456"
@@ -231,6 +237,7 @@ Creates one aircrafto on software. It was expected that shall be provided inform
   ```
   - Response: HTTP 201
   ```json
+  Example
   {
     "token": "some_token"
   }
