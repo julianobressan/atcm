@@ -1,4 +1,6 @@
 <?php
+echo PHP_EOL . "\033[31mWelcome to installation of Juliano Bressan's Air Traffic Control Manager \033[0m" . PHP_EOL;
+echo "Check it out in https://github.com/julianobressan/atcm" . PHP_EOL. PHP_EOL;
 echo "Type a login name for administrator or let empty to use 'admin': " . PHP_EOL;
 $login = trim(fgets(STDIN));
 if(empty($login)) {
@@ -34,7 +36,7 @@ $stmt = $pdo->query("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHE
 $dbExists = (bool) $stmt->fetchColumn();
 
 if($dbExists) {
-    exit("Database already exists." . PHP_EOL);
+    exit("Database already exists. Exiting." . PHP_EOL);
 }
 
 $sqlPath = __DIR__ . '/database.sql';
