@@ -56,7 +56,7 @@ All requirements of exercise were implemented, by some changes were made, accord
 
 The queue resumes the flights registered, sorting acording the requirements on exercise description.
 
-System boot, halt or status normally are information that comes from a realtime consulting to Operational System, RPC call or other component. It is inappropriate to store the status of the system on database. So, for this exercise, I created a mock to system status, simulating a verification of status by simply reading a text file placed in system_info folder. Realize that this file is a result of a request for system status that is managed by a complex component.
+System boot, halt or status normally are information that comes from a realtime consulting to Operational System, RPC call or other component. It is inappropriate to store the status of the system on database. So, for this exercise, I created a mock to system status, simulating a verification of status by simply reading a text file placed in system_info folder. Realize that that file is a result of a request for system status that is managed by some complex component.
 
 Operations with flights hypothetically cannot be performed if the system status is not online. To do that, you should boot the system first by calling the due endpoint. Other functions that depends only of database, like creating session, creating or listing aircrafts works even the system is offline, booting or halting.
 
