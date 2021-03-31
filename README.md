@@ -4,7 +4,7 @@
 The proposal is to implement a basic system to management of air traffic control. The software was developed with (almost) pure PHP, using some basic components open source available on http://packagist.org. For persistance of data was chosen MySQL database system. The software was developed
 using techniques of clean code and best practices for programming, like PHP Standard Recommendations, Test-driven development and Domain-Driven Design.
 
-> "Any fool can write code that a computer can understand. Good programmers write code that humans can understand." - Martin Fowler
+> "Any fool can write code that a computer can understand. Good programmers write code that humans can understand." - Martin Fowler, 
 > Refactoring: Improving the Design of Existing Code, 1999, p. 15
 
 Repository: https://github.com/julianobressan/atcm
@@ -14,7 +14,7 @@ The environment of development was composed by VS Code IDE, Insomnia for REST AP
 
 ## Architecture
 
-> "Modeling Principle: Models are not right or wrong; they are more or less useful." - Martin Fowler
+> "Modeling Principle: Models are not right or wrong; they are more or less useful." - Martin Fowler, 
 > Analysis Patterns: Reusable Object Models, 1997, p. 2
 
 ![System architecture](https://github.com/julianobressan/atcm/blob/main/documents/architecture.png?raw=true)
@@ -284,6 +284,7 @@ Creates one aircrafto on software. It was expected that shall be provided inform
   ```
 ## Next steps
 Attending the deadline, some enhancements stayed out. But, if I had time, I would want implement the following:
+* A migrations system to create database;
 * A query builder for ORM;
 * CRUD of users, roles and permissions;
 * CRUD of configurations of the system;
