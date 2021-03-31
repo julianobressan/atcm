@@ -1,9 +1,7 @@
-# ATCM
+# Air Traffic Control Manager
 ![System architecture](https://reportercoragem.com.br/wp-content/uploads/2018/10/Dia-Mundial-do-Controlador-de-Tr%C3%A1fego-A%C3%A9reo.jpg)
 
-An Air Traffic Control Manager
-
-The proposal is to implement a basic system to management of air traffic control. The software was developed with pure PHP, using some basic components open source available on http://packagist.org. For persistance of date was chosen MySQL database system. The software was developed
+The proposal is to implement a basic system to management of air traffic control. The software was developed with pure PHP, using some basic components open source available on http://packagist.org. For persistance of data was chosen MySQL database system. The software was developed
 using techniques of clean code and best practices for programming, like PHP Standard Recommendations, Test-driven development and Domain-Driven Design.
 
 ## Development environment and resources
@@ -52,15 +50,15 @@ It was used the following packages in this software:
 
 ### Requirements
 * PHP 7.4 or newer
-* MySQL 8
+* MySQL 8 or newer
 * Docker (optional, but recommended)
 
 To run this software, follow instructions above or create a similar environment as you wish. It is recommended using a Linux distro for running.
 
 #### PHP
 Make sure you have installed and enabled the following modules:
-* PDO
-* Rewrite
+* PHP-PDO
+* mod_rewrite
 * PHP-MySQL
 
 #### Web server
@@ -96,29 +94,29 @@ See above all implemented endpoints, verbs, arguments and body when it is necess
 
 ### Flights (queue)
 
-* **GET /queue** 
+- **GET /queue** 
 Returns the actual queue of flights for landing. Returns a JSON array, where each position is similiar with result bellow:
- * Header: Bearer token
- * Response: HTTP 200
+    - Header: Bearer token
+    - Response: HTTP 200
 ```json
 [
     {
         "flight": {
-        "id": "5",
-        "aircraftId": "3",
-        "flightType": "passenger",
-        "flightNumber": "XF 8619",
-        "createdAt": "2021-03-31 00:28:49",
-        "updatedAt": null,
-        "deletedAt": null
+            "id": "5",
+            "aircraftId": "3",
+            "flightType": "passenger",
+            "flightNumber": "XF 8619",
+            "createdAt": "2021-03-31 00:28:49",
+            "updatedAt": null,
+            "deletedAt": null
         },
         "aircraft": {
-        "id": "3",
-        "model": "Antonov An-124",
-        "size": "large",
-        "createdAt": "2021-03-30 21:09:31",
-        "updatedAt": null,
-        "deletedAt": null
+            "id": "3",
+            "model": "Antonov An-124",
+            "size": "large",
+            "createdAt": "2021-03-30 21:09:31",
+            "updatedAt": null,
+            "deletedAt": null
         }
     }
 ]
@@ -203,4 +201,8 @@ Creates one aircrafto on software. It was expected that shall be provided inform
 ```json
 ```
 
+## Author's notes
 
+1st Lieutenant Juliano Bressan - Brazilian Air Force Former Officer
+
+![Ten Bressan](https://github.com/julianobressan/julianobressan/blob/master/ten_bressan.jpg?raw=true)
