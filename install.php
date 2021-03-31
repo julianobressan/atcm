@@ -1,5 +1,5 @@
 <?php
-echo PHP_EOL . "\033[31mWelcome to installation of Juliano Bressan's Air Traffic Control Manager \033[0m" . PHP_EOL;
+echo PHP_EOL . "Welcome to installation of Juliano Bressan's Air Traffic Control Manager" . PHP_EOL;
 echo "Check it out in https://github.com/julianobressan/atcm" . PHP_EOL. PHP_EOL;
 echo "Type a login name for administrator or let empty to use 'admin': " . PHP_EOL;
 $login = trim(fgets(STDIN));
@@ -10,7 +10,8 @@ if(empty($login)) {
 echo "Type a password (minimum 6 characters): " . PHP_EOL;
 $password = trim(fgets(STDIN));
 if(strlen($password) < 6) {   
-    exit("Password too short.". PHP_EOL);
+    echo "\033[31mPassword too short.\033[0m". PHP_EOL;
+    exit();
 }
 
 require __DIR__ . '/vendor/autoload.php';
@@ -29,14 +30,14 @@ $pdo = null;
 if (!is_null($dbType) && !is_null($dbUser) && !is_null($dbPass) && !is_null($dbName) && !is_null($dbHost)) {
      $pdo =  new \PDO("mysql:host={$dbHost};port={$dbPort}", $dbUser, $dbPass);
 } else {
-    exit("Incorrect environment variables." . PHP_EOL);
+    exit("\033[31mIncorrect environment variables.\033[0m" . PHP_EOL);
 }
 
 $stmt = $pdo->query("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{$dbName}'");
 $dbExists = (bool) $stmt->fetchColumn();
 
 if($dbExists) {
-    exit("Database already exists. Exiting." . PHP_EOL);
+    exit("\033[31mDatabase already exists. Exiting.\033[0m" . PHP_EOL);
 }
 
 $sqlPath = __DIR__ . '/database.sql';
@@ -45,17 +46,18 @@ $md5 = md5_file($sqlPath);
 
 $passwordHash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 if ($passwordHash === false) {
-    exit("Password hash failed. Try again." . PHP_EOL);
+    exit("\033[31mPassword hash failed. Try again.\033[0m" . PHP_EOL);
 }
 
 if($md5 !== '8440516de359f30aac6f143822982738') {
-    exit("SQL file was modified. Get the original database.sql file and try again." . PHP_EOL);
+    exit("\033[31mSQL file was modified. Get the original database.sql file and try again.\033[0m" . PHP_EOL);
 }
 $pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
 $pdo->exec($sql);
-
+echo "\033[32mDatabase created\033[0m". PHP_EOL;
 $insertUser = "INSERT INTO `atcm`.`user` (`name`, `password`, `login`) VALUES 'Administrator', '{$passwordHash}', '{$login}');";
-
+$pdo->exec($insertUser);
+echo "\033[32mAdministrator user '{$login}' created\033[0m". PHP_EOL;
 deletefiles:
 echo "It is recommended that database.sql and install.php files must be deleted, for security reasons. Do you want do delete now?" . PHP_EOL;
 echo "[Y] / N" . PHP_EOL;
@@ -67,5 +69,5 @@ if(strtoupper($delete) == "Y" || empty($delete)) {
     echo "Skipping deletion of installation files" . PHP_EOL;
 } else goto deletefiles;
 
-echo "The system was sucessfully installed." . PHP_EOL;
+echo "\033[32mThe system was sucessfully installed.\033[0m" . PHP_EOL;
 exit();
