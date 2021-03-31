@@ -12,7 +12,8 @@ The environment of development was composed by VS Code IDE, Insomnia for REST AP
 
 ### Layers
 
-Attending instructions for this challenge, the architecture was implemented with 3 layers.
+Attending instructions for this challenge, the architecture was implemented with 3 layers. Other architecture patterns were structured in sub-layers.
+
 #### API
 It has the implementation of REST API, using Slim Framework and consists in 3 folders:
 * **config**:  Configurations about REST API;
