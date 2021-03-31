@@ -49,10 +49,14 @@ This layers contains objects responsible to connect and manipulate the database 
 ![Entity Relationship Diagram](https://github.com/julianobressan/atcm/blob/main/documents/er-diagram.png?raw=true)
 
 ## Challenge compliance
+
 All requirements of exercise were implemented, by some changes were made, according my understanding of the domain. I understood that aircrafts are immutable, like size or other aditional data, like manufacturer, model, weight, etc. The kind of load, proposal of flight or emergency landing need are mutable and can change during the flight. So, I separated aircraft and flight in two entities:
 * Aircraft: register an aircraft in the system, with your immutable characteristics. For this software, it is mandatory to provide the size (small or large) and optional to provide a model name;
 * Flight: Fligh have an aircraft associated, a schedule, an identification number, a kind/gender and can become an emergency landing need. For this software, it is mandatory to provide a FlightType (emergency, vip, passenger or cargo), an aircraft and optional to provide a flight number;
+
 The queue resumes the flights registered, sorting acording the requirements on exercise description.
+
+System boot, halt or status normally are information that comes from a realtime consulting to Operational System, RPC call or other component. It is inappropriate to store the status of the system on database. So, for this exercise, I created a mock to system status, simulating a verification of status by simply reading a text file placed in system_info folder. Realize that this file is a result of a request for system status that is managed by a complex component.
 
 ## Third-part packages
 It was used the following packages in this software:
