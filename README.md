@@ -156,7 +156,11 @@ git clone https://github.com/julianobressan/atcm.git && cd atcm
 ```
 docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
 ```
-3. Run the installation script: 
+3. Install the dependencies of the project and initialize the autoloading:
+```
+php composer.phar install && php composer.phar dump-autoload
+```
+5. Run the installation script: 
 ```
 php install.php
 ```
