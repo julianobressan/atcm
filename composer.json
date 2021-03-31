@@ -1,7 +1,8 @@
 {
     "name": "julianobressan/atcm",
     "description": "An air taffic controll manager",
-    "type": "library",
+    "homepage": "https://github.com/julianobressan/atcm",
+    "type": "project",
     "require": {
         "monolog/monolog": "^2.2",
         "slim/slim": "4.*",
@@ -18,7 +19,9 @@
     "authors": [
         {
             "name": "Juliano Bressan",
-            "email": "bressan.rs@gmail.com"
+            "email": "bressan.rs@gmail.com",
+            "role": "developer",
+            "homepage": "https://github.com/julianobressan"
         }
     ],
     "autoload": {
