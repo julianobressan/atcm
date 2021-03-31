@@ -100,7 +100,9 @@ Make sure you have installed and enabled the following modules:
 
 #### Web server
 You can use the internal web service of PHP, running the command bellow the terminal, running on root project folder:
+
 `php -S localhost:8080 -t public public/index.php`
+
 If you wish, you can change the port to another, but remember of point correctly the API calls in that port.
 
 #### Database
