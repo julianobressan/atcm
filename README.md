@@ -108,8 +108,8 @@ Before using the software, you have to clone repo, make some configurations and 
 ```git clone https://github.com/julianobressan/atcm.git```
 2. Create a Docker container to serve the database: ```docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql```
 3. Run the installation script: ```php install.php```
- - Follow the instructions in your terminal;
- - At the end, you will asked if do you want to delete the install.php script and database.sql file. It is recommended that you do that, but you can skip this step if it is your wish.
+  - Follow the instructions in your terminal;
+  - At the end, you will asked if do you want to delete the install.php script and database.sql file. It is recommended that you do that, but you can skip this step if it is your wish.
 4. Start the server, using the internal PHP web server: ```php -S localhost:8080 -t public public/index.php```
 5. Import in your Insomnia application the [JSON file with endpoints](https://github.com/julianobressan/atcm/blob/de796950eb28a991ba24e6ae3a259bdd8150f158/documents/insomnia_endpoints.json);
 6. In Insomnia, run the request **Session/Create session**. Fill the body with login and password you provided in step 3. Copy returned token, click on Development environment then in Manage Environments, or simply press Ctrl+E. Fill the value of token key with copied token. It will be used to authenticate all required requests with the Bearer JWT token;
@@ -124,8 +124,8 @@ See above all implemented endpoints, verbs, arguments and body when it is necess
 Returns the actual queue of flights for landing. Returns a JSON array, where each position is similiar with result bellow:
   - Header: Bearer token
   - Response: HTTP 200
-```json
-[
+  ```json
+  [
     {
         "flight": {
             "id": "5",
@@ -145,8 +145,8 @@ Returns the actual queue of flights for landing. Returns a JSON array, where eac
             "deletedAt": null
         }
     }
-]
-```
+  ]
+  ```
 
 - **POST /queue**
 Register a new flight, associated with an aircraft and have a type. The types can be: **emergency**, **vip**, **passenger** or **cargo**.
@@ -158,7 +158,7 @@ Register a new flight, associated with an aircraft and have a type. The types ca
     "type": "cargo"
   }
   ```
- - Response: HTTP 201
+  - Response: HTTP 201
 
 * **DELETE /queue/{flightId}**
 Dequeues the first flight on the queue, according rules for priorization implemented. It expects the ID of flight. This parameter is required to prevent that an air traffic controller that are seeing an outdated list in your screen command to dequeue thinking in one flight and the system dequeues another. So, for example, if the controller are seeing the flight ID 9999 and command to dequeue expecting that this flight is to be dequeue, the software checks if at the moment of execution those flight still is the first to be dequeue on queue. If, during this time, another controller dequeued those flight, the system will warn that those flight was already dequeued.
@@ -171,8 +171,8 @@ Dequeues the first flight on the queue, according rules for priorization impleme
 Gets a list of all aircrafts registeres
   - Header: Bearer token
   - Response: HTTP 200
-```json
-[
+  ```json
+  [
     {
         "id": "1",
         "model": "Antonov An-225 Mriya",
@@ -181,44 +181,44 @@ Gets a list of all aircrafts registeres
         "updatedAt": null,
         "deletedAt": null
     }
-]
-```
+  ]
+  ```
 
 - **POST /aircraft**
 Creates one aircrafto on software. It was expected that shall be provided information abaout **size** of aircraft, which can be **small** or **large**. Also, can be informed the **model** of aircraft (optional). If omitted model, software will take some random model for it.
   - Header: Bearer token
   - Body: JSON
- ```json
- {
+  ```json
+  {
     "size": "large",
     "model": "Embraer KC390"
- }
+  }
 
- - Response: HTTP 201
- ```json
- {
+  - Response: HTTP 201
+  ```json
+  {
     "size": "large",
     "model": "Embraer KC39",
     "id": 15
- }
- ```
+  }
+  ```
 
 ### Session
- - POST /session
- - Header: Bearer token
- - Body: JSON
- ```json
- {
+- POST /session
+  - Header: Bearer token
+  - Body: JSON
+  ```json
+  {
     "login": "admin",
     "password": "123456"
  }
 
- - Response: HTTP 201
- ```json
- {
+  - Response: HTTP 201
+  ```json
+  {
     "token": "some_token"
- }
- ```
+  }
+  ```
 
 ## Author's notes
 
