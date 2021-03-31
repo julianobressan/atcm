@@ -5,7 +5,7 @@ The proposal is to implement a basic system to management of air traffic control
 using techniques of clean code and best practices for programming, like PHP Standard Recommendations, Test-driven development and Domain-Driven Design.
 
 ## Development environment and resources
-For codgin was used IDE VS Code, Insomnia for REST API calls, PHPUnit for testing, XDebug for debugging and Docker for database service.
+The environment of development was composed by VS Code IDE, Insomnia for REST API calls, PHPUnit for testing, XDebug for debugging and Docker for database service.
 
 ## Architecture
 ![System architecture](https://github.com/julianobressan/atcm/blob/main/documents/architecture.png?raw=true)
@@ -22,14 +22,27 @@ It has the implementation of REST API, using Slim Framework and consists in 3 fo
 #### Core
 This is the logical layer. It contains all classes that have the logical implementation of software, which is the middleware between API and Data layers.
 * **Controllers**: These objects are proxies to requests of API, redirecting callings to right services;
-* **Helpers**: Some helper classes
-* **Exceptions**: Implementation of custom exceptions for this software
-* **Services**: Contains the business rules for manipulation of data and responses for controllers. These objects really executes the instructions of software;
+* **Helpers**: Some helper classes;
+* **Exceptions**: Implementation of custom exceptions for this software;
+* **Services**: Contains the business rules for manipulation of data and responses for controllers. These objects really executes the instructions of software; and
+* **Interfaces**: Provides interfaces for Core layer objects.
 
 #### Data
+This layers contains objects responsible to connect and manipulate the database and represents the entities on software.
+* **Enums**: Besides PHP 7.4 do not have enums, here have some classes that enumerates some information used in the domain of software;
+* **Interfaces**: Provides interfaces for Data layer objects; 
+* **ORM**: Implementing the pattern Object Relational Mapper, it contains the objects to connect with database and perform SQL statements according the main functions related with entities manipulating;
+* **Models**: Objects that represents every entity in the software and provides methods to manipulate them, like IModelBase::find(), IModelBase::save(), IModelBase::save(), IModelBase::delete(), among others.
 
-
-#### Other files 
+#### Other important files 
+* **public/**: This folder contains one only file, index.php, which is the gateway to API REST requests;
+* **tests/**: Contais all automated tests of PHPUnit;
+* **logs/**: Contains log files for unexpected errors. It could be monitored by a system of log monitoring;
+* **system_info/**: Mockup of information about the system availability;
+* **documents/**: Just some documents of the software;
+* **.env**: File with environment variables for software usage;
+* **install.php**: Script for installation of the software database; and
+* **database.sql**: Initial SQL file.
 
 
 ### Entity Relationship Diagram
@@ -37,29 +50,29 @@ This is the logical layer. It contains all classes that have the logical impleme
 
 ## Third-part packages
 It was used the following packages in this software:
-* **slim/slim**: A mini-framework to create REST APIs, widely used for this proposal 
-* **slim/psr7**: A package required by **slim/slim** to attend PSR-7 and allows to create HTTP message interfaces
-* **monolog/monolog**: An excelent package for logging use by main PHP Frameworks currently
-* **vlucas/phpdotenv**: A simple package to read environment variables placed in a .env file and registering them globally
-* **php-di/php-di**: A package to Dependency Injection, used to create Containers on API REST of **slim/slim**
-* **tuupola/slim-jwt-auth**: A package to allow **slim/slim** to authenticate JWT Bearer tokens
-* **firebase/php-jwt**: With this package the software is able to create JWT tokens
-* **phpunit/phpunit**: The best framework for testing
+* **slim/slim**: A mini-framework to create REST APIs, widely used for this proposal;
+* **slim/psr7**: A package required by **slim/slim** to attend PSR-7 and allows to create HTTP message interfaces;
+* **monolog/monolog**: An excelent package for logging use by main PHP Frameworks currently;
+* **vlucas/phpdotenv**: A simple package to read environment variables placed in a .env file and registering them globally;
+* **php-di/php-di**: A package to Dependency Injection, used to create Containers on API REST of **slim/slim**;
+* **tuupola/slim-jwt-auth**: A package to allow **slim/slim** to authenticate JWT Bearer tokens;
+* **firebase/php-jwt**: With this package the software is able to create JWT tokens; and
+* **phpunit/phpunit**: The best framework for testing.
 
 ## Configuring the environment
 
 ### Requirements
-* PHP 7.4 or newer
-* MySQL 8 or newer
-* Docker (optional, but recommended)
+* PHP 7.4 or newer;
+* MySQL 8 or newer; and
+* Docker (optional, but recommended).
 
 To run this software, follow instructions above or create a similar environment as you wish. It is recommended using a Linux distro for running.
 
 #### PHP
 Make sure you have installed and enabled the following modules:
-* PHP-PDO
-* mod_rewrite
-* PHP-MySQL
+* PHP-PDO;
+* mod_rewrite; and
+* PHP-MySQL.
 
 #### Web server
 You can use the internal web service of PHP, running the command bellow the terminal, running on root project folder:
@@ -88,6 +101,19 @@ DB_PASS="mypassword"
 In your first run, the program will create the database schema. The name for schema will be **atcm**. If you do want to use another name for schema, edit the `.env` file before running. If you prefer run the database installed directly in your host system or another host, ensure that correct credentials are filled on .env file and database user have permissions to create databases and tables, select, insert, deleted and update statements.
 
 ## First run (software installation)
+
+Before using the software, you have to clone repo, make some configurations and install the initial database. Follow the instructions:
+
+1. Open your terminal in a desired diretory and lone the repository in your system:
+```git clone https://github.com/julianobressan/atcm.git```
+2. Create a Docker container to serve the database: ```docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql```
+3. Run the installation script: ```php install.php```
+ - Follow the instructions in your terminal;
+ - At the end, you will asked if do you want to delete the install.php script and database.sql file. It is recommended that you do that, but you can skip this step if it is your wish.
+4. Start the server, using the internal PHP web server: ```php -S localhost:8080 -t public public/index.php```
+5. Import in your Insomnia application the file with endpoints, 
+6. In Insomnia, run the request **Session/Create session**. Fill the body with login and password you provided in step 3. Copy returned token, click on Development environment then in Manage Environments, or simply press Ctrl+E. Fill the value of token key with copied token. It will be used to authenticate all required requests with the Bearer JWT token;
+7. Explore the API.
 
 ## REST API documentation
 See above all implemented endpoints, verbs, arguments and body when it is necessary. All body formats are in JSON format. The endpoints that need autentication are marked.
@@ -135,7 +161,7 @@ Register a new flight, associated with an aircraft and have a type. The types ca
  * Response: HTTP 201
 
 * **DELETE /queue/{flightId}**
-Dequeues the first flight on the queue, according rules for priorization implemented. If expects the ID of flight. This parameter is required to avoid that a air traffic controller that are seeing an outdated list in your screen command to dequeue thinking in one flight and the system dequeues another. So, for example, if the controller are seeing the flight ID 9999 and command to dequeue expecting that this flight is to be dequeue, the software checks if at the moment of execution those flight still is the first to be dequeue on queue. If, during this time, another controller dequeued those flight, the system will warn that those flight was already dequeued.
+Dequeues the first flight on the queue, according rules for priorization implemented. It expects the ID of flight. This parameter is required to prevent that an air traffic controller that are seeing an outdated list in your screen command to dequeue thinking in one flight and the system dequeues another. So, for example, if the controller are seeing the flight ID 9999 and command to dequeue expecting that this flight is to be dequeue, the software checks if at the moment of execution those flight still is the first to be dequeue on queue. If, during this time, another controller dequeued those flight, the system will warn that those flight was already dequeued.
  * Header: Bearer token
  * Response: HTTP 204
 
