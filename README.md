@@ -137,7 +137,7 @@ In your first run, the program will create the database schema. The name for sch
 Before using the software, you have to clone repo, make some configurations and install the initial database. Follow the instructions:
 
 1. Open your terminal in a desired diretory and lone the repository in your system:
-```git clone https://github.com/julianobressan/atcm.git```
+```git clone https://github.com/julianobressan/atcm.git && cd atcm```
 2. Create a Docker container to serve the database: `docker run --name mysql-atcm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql`
 3. Run the installation script: `php install.php`
   - Follow the instructions in your terminal;
